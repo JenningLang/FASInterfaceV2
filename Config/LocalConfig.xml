@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<!-- 西门子FAS主机配置 -->
+	<FASConfig>
+	    <!-- FAS主机ip地址 -->
+		<siemensFASIP>
+			192.168.200.1
+		</siemensFASIP>
+	    <!-- FAS主机ID -->
+		<siemensFASID>
+			1
+		</siemensFASID>
+		
+	    <!-- 接口机ID -->
+		<interfaceFASIP>
+			192.168.200.8
+		</interfaceFASIP>
+		<interfaceFASID>
+			200
+		</interfaceFASID>
+		
+	    <!-- 西门子配置文件 -->
+		<sibxFileName>
+			Config\\tonghao20160906_sibx.xml
+		</sibxFileName>
+	</FASConfig>
+	
+	<!-- FCMP 配置 -->
+	<FCMPConfig>
+		<appIP>
+			192.168.100.77
+		</appIP>
+		<appPorts>
+			<localPort>
+				8001
+			</localPort>
+			<remotePort>
+				9030
+			</remotePort>
+		</appPorts>
+	</FCMPConfig>
+</Config>

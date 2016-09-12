@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="bacnet4J-src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/BACnet/java/bacnet4J.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/BACnet/java/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/RXTX-SDK-I20071016-1945/plugins/gnu.io.rxtx_2.1.7.4_v20071016.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/Apache Thrift/libthrift-0.9.0.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/BACnet/java/seroUtils.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackL/.m2/repository/org/jdom/jdom/1.1.3/jdom-1.1.3.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.jdom"/>
+			<attribute name="maven.artifactId" value="jdom"/>
+			<attribute name="maven.version" value="1.1.3"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/libthrift-0.9.0.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/Communication.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/httpclient-4.1.3.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/httpcore-4.1.3.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/log4j-1.2.14.jar" sourcepath="C:/Users/JackL/.m2/repository/log4j/log4j/1.2.14/log4j-1.2.14-sources.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/FCMP相关/javaZhangSongjian20160725/javaAppLib/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackL/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackL/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="E:/0 工作/通号院/jaxen-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackL/workspace/VariableTimerV1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JackL/workspace/FASRecoveryMsg.jar" sourcepath="/FASRecoveryMsg"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

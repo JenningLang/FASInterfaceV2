@@ -1,0 +1,259 @@
+2016-08-30 15:31:16,209-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:31:17,266-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:30)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:25)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:28)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-08-30 15:31:17,271-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-08-30 15:31:45,551-[main]-FCMP.Communication.reconnect(Communication.java:175)-ERROR -- reconnect fail to server!
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.reconnect(Communication.java:170)
+	at FCMP.Communication.getAliveClt(Communication.java:232)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:93)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 3 more
+2016-08-30 15:31:45,553-[main]-FCMP.Communication.getAliveClt(Communication.java:234)-ERROR -- getAliveClt operator fails!
+2016-08-30 15:31:58,283-[main]-FCMP.Communication.close(Communication.java:133)-ERROR -- In close process.
+org.apache.thrift.transport.TTransportException: Cannot write to null outputStream
+	at org.apache.thrift.transport.TIOStreamTransport.write(TIOStreamTransport.java:142)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeI32(TBinaryProtocol.java:163)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeMessageBegin(TBinaryProtocol.java:91)
+	at org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:62)
+	at FCMP.AppToServer$Client.send_disconnect(AppToServer.java:133)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:125)
+	at FCMP.Communication.close(Communication.java:130)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+2016-08-30 15:31:58,284-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:31:58,284-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 15:34:12,322-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:34:13,330-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:30)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:25)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:28)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-08-30 15:34:13,333-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-08-30 15:34:59,479-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:34:59,480-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 15:35:11,453-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:35:11,484-[main]-FCMP.Communication.initialize(Communication.java:124)- INFO -- Initialize success!
+2016-08-30 15:36:42,306-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:36:50,439-[main]-FCMP.Communication.initialize(Communication.java:107)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.SocketException: Connection reset
+	at org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:129)
+	at org.apache.thrift.transport.TTransport.readAll(TTransport.java:84)
+	at org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:378)
+	at org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:297)
+	at org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:204)
+	at org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)
+	at FCMP.AppToServer$Client.recv_disconnect(AppToServer.java:139)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:126)
+	at FCMP.Communication.initialize(Communication.java:104)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:30)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:25)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:28)
+Caused by: java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:209)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:127)
+	... 11 more
+2016-08-30 15:36:50,440-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-08-30 15:36:54,650-[main]-FCMP.Communication.close(Communication.java:133)-ERROR -- In close process.
+org.apache.thrift.transport.TTransportException: Cannot write to null outputStream
+	at org.apache.thrift.transport.TIOStreamTransport.write(TIOStreamTransport.java:142)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeI32(TBinaryProtocol.java:163)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeMessageBegin(TBinaryProtocol.java:91)
+	at org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:62)
+	at FCMP.AppToServer$Client.send_disconnect(AppToServer.java:133)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:125)
+	at FCMP.Communication.close(Communication.java:130)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+2016-08-30 15:36:54,650-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:36:54,651-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 15:37:27,289-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:37:27,335-[main]-FCMP.Communication.initialize(Communication.java:124)- INFO -- Initialize success!
+2016-08-30 15:37:40,925-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:37:40,925-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 15:45:35,819-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:45:36,828-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:30)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:25)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:28)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-08-30 15:45:36,832-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-08-30 15:45:42,904-[main]-FCMP.Communication.close(Communication.java:133)-ERROR -- In close process.
+org.apache.thrift.transport.TTransportException: Cannot write to null outputStream
+	at org.apache.thrift.transport.TIOStreamTransport.write(TIOStreamTransport.java:142)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeI32(TBinaryProtocol.java:163)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeMessageBegin(TBinaryProtocol.java:91)
+	at org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:62)
+	at FCMP.AppToServer$Client.send_disconnect(AppToServer.java:133)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:125)
+	at FCMP.Communication.close(Communication.java:130)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+2016-08-30 15:45:42,905-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:45:42,905-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 15:57:49,444-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 15:57:50,454-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:30)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:25)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:28)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-08-30 15:57:50,458-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-08-30 15:57:56,326-[main]-FCMP.Communication.close(Communication.java:133)-ERROR -- In close process.
+org.apache.thrift.transport.TTransportException: Cannot write to null outputStream
+	at org.apache.thrift.transport.TIOStreamTransport.write(TIOStreamTransport.java:142)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeI32(TBinaryProtocol.java:163)
+	at org.apache.thrift.protocol.TBinaryProtocol.writeMessageBegin(TBinaryProtocol.java:91)
+	at org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:62)
+	at FCMP.AppToServer$Client.send_disconnect(AppToServer.java:133)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:125)
+	at FCMP.Communication.close(Communication.java:130)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+2016-08-30 15:57:56,326-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 15:57:56,326-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-08-30 16:16:00,652-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-08-30 16:16:00,714-[main]-FCMP.Communication.initialize(Communication.java:124)- INFO -- Initialize success!
+2016-08-30 16:16:45,942-[main]-FCMP.Communication.close(Communication.java:133)-ERROR -- In close process.
+org.apache.thrift.transport.TTransportException: java.net.SocketException: Connection reset by peer: socket write error
+	at org.apache.thrift.transport.TIOStreamTransport.flush(TIOStreamTransport.java:161)
+	at org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:65)
+	at FCMP.AppToServer$Client.send_disconnect(AppToServer.java:133)
+	at FCMP.AppToServer$Client.disconnect(AppToServer.java:125)
+	at FCMP.Communication.close(Communication.java:130)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+Caused by: java.net.SocketException: Connection reset by peer: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:109)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.thrift.transport.TIOStreamTransport.flush(TIOStreamTransport.java:159)
+	... 6 more
+2016-08-30 16:16:45,943-[main]-org.apache.thrift.transport.TIOStreamTransport.close(TIOStreamTransport.java:112)- WARN -- Error closing output stream.
+java.net.SocketException: Socket closed
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:116)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at java.io.FilterOutputStream.close(FilterOutputStream.java:158)
+	at org.apache.thrift.transport.TIOStreamTransport.close(TIOStreamTransport.java:110)
+	at org.apache.thrift.transport.TSocket.close(TSocket.java:194)
+	at FCMP.Communication.close(Communication.java:136)
+	at communication.FCMPChannel.closeCommChannel(FCMPChannel.java:34)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:83)
+2016-08-30 16:16:45,944-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:59)- INFO -- Out of the Loop.
+2016-08-30 16:16:45,944-[main]-FCMP.Communication.close(Communication.java:146)- INFO -- close finished!
+2016-09-06 14:43:09,132-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-09-06 14:43:10,182-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:16)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:28)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:59)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-09-06 14:43:10,187-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-09-06 14:45:33,161-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-09-06 14:48:07,344-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8001
+2016-09-06 14:48:08,352-[main]-FCMP.Communication.initialize(Communication.java:97)-ERROR -- In initialize process.
+org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused: connect
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:185)
+	at FCMP.Communication.initialize(Communication.java:94)
+	at communication.FCMPChannel.<init>(FCMPChannel.java:16)
+	at FASInterfaceMain.FASInterfaceMachine.<init>(FASInterfaceMachine.java:28)
+	at FASInterfaceMain.FASInterfaceMain.main(FASInterfaceMain.java:59)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at org.apache.thrift.transport.TSocket.open(TSocket.java:180)
+	... 4 more
+2016-09-06 14:48:08,359-[main]-FCMP.Communication.initialize(Communication.java:122)-FATAL -- Initialize fail, can not continue next!
+2016-09-06 14:51:00,371-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8005
+2016-09-06 14:53:10,341-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8005
+2016-09-06 14:53:59,429-[msgRecv]-FCMP.Communication$MsgReceiver.run(Communication.java:52)- INFO -- Recving Thread: Starting server on port : 8005

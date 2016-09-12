@@ -1,0 +1,18 @@
+2016-09-05 14:50:14  [ main:0 ] - [ INFO ]  Reading the config file: ./Config/LocalConfig.xml
+2016-09-05 14:50:15  [ main:1686 ] - [ INFO ]  Config result:
+2016-09-05 14:50:15  [ main:1688 ] - [ INFO ]  FAS: siemensFASIP: 192.168.200.1
+2016-09-05 14:50:15  [ main:1689 ] - [ INFO ]  FAS: siemensFASID: 1
+2016-09-05 14:50:15  [ main:1690 ] - [ INFO ]  FAS: interfaceFASIP: 192.168.200.8
+2016-09-05 14:50:15  [ main:1691 ] - [ INFO ]  FAS: interfaceFASID: 200
+2016-09-05 14:50:15  [ main:1693 ] - [ INFO ]  FCMP: AppAddr: 192.168.100.77
+2016-09-05 14:50:15  [ main:1694 ] - [ INFO ]  FCMP: LocalPort: 8001
+2016-09-05 14:50:15  [ main:1696 ] - [ INFO ]  FCMP: RemotePort: 9030
+2016-09-05 14:52:24  [ main:0 ] - [ INFO ]  Reading the config file: ./Config/LocalConfig.xml
+2016-09-05 14:52:25  [ main:1122 ] - [ INFO ]  Config result:
+2016-09-05 14:52:25  [ main:1123 ] - [ INFO ]  FAS: siemensFASIP: 192.168.200.1
+2016-09-05 14:52:25  [ main:1123 ] - [ INFO ]  FAS: siemensFASID: 1
+2016-09-05 14:52:25  [ main:1123 ] - [ INFO ]  FAS: interfaceFASIP: 192.168.200.8
+2016-09-05 14:52:25  [ main:1124 ] - [ INFO ]  FAS: interfaceFASID: 200
+2016-09-05 14:52:25  [ main:1124 ] - [ INFO ]  FCMP: AppAddr: 192.168.100.77
+2016-09-05 14:52:25  [ main:1125 ] - [ INFO ]  FCMP: LocalPort: 8001
+2016-09-05 14:52:25  [ main:1125 ] - [ INFO ]  FCMP: RemotePort: 9030
