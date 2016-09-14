@@ -10,11 +10,15 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import FASException.InvalidConfigException;
-import FASException.NoAvailablePortException;
+import fasException.InvalidConfigException;
+import fasException.NoAvailablePortException;
 
 public class ConfigUtil {
-
+	
+	private static ConfigUtil configUtil;// 单例
+	
+	private static int stationID; // 站码
+	
 	private static String siemensFASIP; // FAS 主机 ip
 	private static int siemensFASID; // FAS 主机的 BACnet ID
 	private static String interfaceFASIP; // 接口机 ip
@@ -24,17 +28,31 @@ public class ConfigUtil {
 	private static int FCMPLocalPort; // FCMP后端程序端口
 	private static int FCMPRemotePort; // FCMP前端程序本地端口
 	
+	
 	private Logger logger = FASInterfaceMain.FASInterfaceMain.FASLogger;
+	
+	public static ConfigUtil getConfigUtil() throws JDOMException, IOException, // 打开配置文档异常
+											NoAvailablePortException, // 无法创建端口异常
+											InvalidConfigException // 非法配置项异常
+	{
+		if(configUtil == null){
+			configUtil = new ConfigUtil();
+		}
+		return configUtil;
+	}
+	
 	/**
 	 * 
 	 * @throws JDOMException, IOException, UnknownHostException, NoAvailablePortException
 	 * */
-	public ConfigUtil() throws JDOMException, IOException, // 打开配置文档异常
+	private ConfigUtil() throws JDOMException, IOException, // 打开配置文档异常
 								NoAvailablePortException, // 无法创建端口异常
 								InvalidConfigException // 非法配置项异常
 	{
 		SAXBuilder saxBuilder = new SAXBuilder();
         Document document = saxBuilder.build(new File("Config\\LocalConfig.xml"));// 构造器
+        // StationID Elements
+		Element StationIDEle = document.getRootElement().getChild("StationID");
         // FAS Elements
 		Element FASConfEle = document.getRootElement().getChild("FASConfig");
 		Element siemensFASIPEle = FASConfEle.getChild("siemensFASIP");
@@ -47,6 +65,8 @@ public class ConfigUtil {
 		Element FCMPAppPortsConfEle = FCMPEle.getChild("appPorts");
 		Element FCMPLocalPortEle = FCMPAppPortsConfEle.getChild("localPort");
 		Element FCMPRemotePortEle = FCMPAppPortsConfEle.getChild("remotePort");
+		
+		stationID = Integer.parseInt(StationIDEle.getText().trim());
 		
 		siemensFASIP = siemensFASIPEle.getText().trim();
 		interfaceFASIP = interfaceFASIPEle.getText().trim();
@@ -77,16 +97,20 @@ public class ConfigUtil {
 		
 		// 配置项读取完毕
 		logger.info("Config result:");
-		logger.info("FAS: siemensFASIP: " + siemensFASIP);
-		logger.info("FAS: siemensFASID: " + siemensFASID);
-		logger.info("FAS: interfaceFASIP: " + interfaceFASIP);
-		logger.info("FAS: interfaceFASID: " + interfaceFASID);
-		logger.info("FCMP: AppAddr: " + FCMPAppAddr);
-		logger.info("FCMP: LocalPort: " + FCMPLocalPort);
-		logger.info("FCMP: RemotePort: " + FCMPRemotePort);
+		logger.info("\t\t stationID: " + stationID);
+		logger.info("\t\t FAS: siemensFASIP: " + siemensFASIP);
+		logger.info("\t\t FAS: siemensFASID: " + siemensFASID);
+		logger.info("\t\t FAS: interfaceFASIP: " + interfaceFASIP);
+		logger.info("\t\t FAS: interfaceFASID: " + interfaceFASID);
+		logger.info("\t\t FCMP: AppAddr: " + FCMPAppAddr);
+		logger.info("\t\t FCMP: LocalPort: " + FCMPLocalPort);
+		logger.info("\t\t FCMP: RemotePort: " + FCMPRemotePort);
 	}
 	
 	// getters
+	public static int getStationID() {
+		return stationID;
+	}
 	public static String getSiemensFASIP() {
 		return siemensFASIP;
 	}

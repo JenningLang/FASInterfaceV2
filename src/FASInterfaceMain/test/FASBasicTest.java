@@ -32,8 +32,6 @@ import com.serotonin.bacnet4j.type.primitive.Real;
 import com.serotonin.bacnet4j.type.primitive.UnsignedInteger;
 import com.serotonin.bacnet4j.util.RequestUtils;
 
-import FAS.FASDevice;
-import FAS.FASZone;
 import FAS.SiemensFAS;
 import FAS.SibX.SiemensConfig;
 import FCMP.*;
@@ -42,6 +40,7 @@ import FCMP.*;
 import FCMP.Communication;
 import FCMP.SendMessage;
 import FCMP.RecvMessage;
+@SuppressWarnings("unused")
 public class FASBasicTest {
 
 	public static void main(String[] args)

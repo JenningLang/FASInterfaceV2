@@ -16,7 +16,7 @@ import com.serotonin.bacnet4j.type.enumerated.Segmentation;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.type.primitive.UnsignedInteger;
 
-import FASException.*;
+import fasException.*;
 
 public class FASCommChannel {
 	

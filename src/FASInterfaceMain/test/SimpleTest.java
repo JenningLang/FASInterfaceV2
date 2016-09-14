@@ -30,8 +30,6 @@ import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.type.primitive.Real;
 import com.serotonin.bacnet4j.util.RequestUtils;
 
-import FAS.FASDevice;
-import FAS.FASZone;
 import FAS.SibX.SiemensConfig;
 import FCMP.*;
 // FCMP.Address will collide with another package, so just use FCMP.Address instead
@@ -43,17 +41,6 @@ public class SimpleTest {
 
 	public static void main(String[] args) throws Exception
 	{	
-		List<FASZone> localFASZone; // 区间列表
-		List<FASDevice> localFASDevice; // 设备列表
-		localFASZone = new ArrayList<FASZone>();
-		localFASDevice = new ArrayList<FASDevice>();
-		try{
-			SiemensConfig.configZoneAndDevice(localFASZone, localFASDevice);
-			System.out.println(localFASZone.size());
-			System.out.println(localFASDevice.size());
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		// BACnet test
 //        IpNetwork network = new IpNetwork();
 //        Transport transport = new Transport(network);

@@ -10,9 +10,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jdom.JDOMException;
 
 import FCMP.*;
+import fasException.*;
 import fasUtil.ConfigUtil;
 import FAS.connectionKeeper;
-import FASException.*;
 
 public class FASInterfaceMain {
 
@@ -27,11 +27,11 @@ public class FASInterfaceMain {
 	{
 		// log4j 读属性
 		PropertyConfigurator.configure("./log4j.properties");
-		// read config file
+		/////////////////////////////  read config file  ////////////////////////////////
 		FASLogger.info("0 **************************************************");
 		FASLogger.info("Reading the config file: ./Config/LocalConfig.xml");
 		try {
-			configUtil = new ConfigUtil();
+			configUtil = ConfigUtil.getConfigUtil();
 		} catch (JDOMException | IOException e) {
 			FASLogger.error("Cannot read the config file: ./Config/LocalConfig.xml");
 			FASLogger.info("Program exit!");
@@ -52,7 +52,7 @@ public class FASInterfaceMain {
 		// 人机界面的提示符定义
 		String prompt = "\\>";
 		
-		// 1 接口机对象创建与初始化
+		///////////////////////////// 1 接口机对象创建与初始化  /////////////////////////////
 		FASLogger.info("1 **************************************************");
 		FASLogger.info("Building the 'Interface' machine...");
 		try {
@@ -71,7 +71,7 @@ public class FASInterfaceMain {
 			FASLogger.info("Program exit!");
 			FASLogger.debug(e.getMessage(), e);
 			return;
-		}catch(ConfigZoneAndDeviceException e){
+		}catch(ConfigFASNodeException e){
 			FASLogger.error("ConfigZoneAndDeviceException");
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
@@ -81,7 +81,7 @@ public class FASInterfaceMain {
 		}catch(FCMPInitialException e){
 			FASLogger.error("FCMPInitialException");
 			FASLogger.info("Sources release ...");
-			sourcesRelease();
+			closeFCMP();
 			FASLogger.info("Program exit!");
 			FASLogger.debug(e.getMessage(), e);
 			return;
@@ -136,7 +136,7 @@ public class FASInterfaceMain {
 		FASLogger.info("'Interface' machine starting succeed!");
 		System.out.println("");
 		
-		// HMI
+		// HMI 人机交互
 		try{
 			Scanner reader = new Scanner(System.in);
 			String inputCommand;
@@ -179,13 +179,7 @@ public class FASInterfaceMain {
 							+ "checks the connection with the Siemens FAS panel. ");
 					System.out.print(prompt);
 				}else if(inputCommand.equals("fasstatus") || inputCommand.equals("fs")){
-					machine.getFireAlarmSystem().printFASStatus();
-					System.out.print(prompt);
-				}else if(inputCommand.equals("fasdevicestatus") || inputCommand.equals("fd")){
-					machine.getFireAlarmSystem().printFASDeviceStatus();
-					System.out.print(prompt);
-				}else if(inputCommand.equals("faszonestatus") || inputCommand.equals("fz")){
-					machine.getFireAlarmSystem().printFASZoneStatus();
+					machine.getFireAlarmSystem().printFASStatus(true);
 					System.out.print(prompt);
 				}else{
 					System.out.println("Wrong command!");
@@ -201,20 +195,30 @@ public class FASInterfaceMain {
 	private static void sourcesRelease(){
 		FASLogger.info("Releasing sources...");
 		// 结束握手线程
+		closeHandShakeThread();
+		// 结束主逻辑线程
+		closeMainThread();
+		// 关闭FAS通讯
+		closeFAS();
+		// 关闭FCMP通讯
+		closeFCMP();
+	}
+	private static void closeHandShakeThread(){
 		if(handShakeThread != null){
 			if(handShakeThread.isAlive()){
 				handShakeThread.stop();
 				FASLogger.info(handShakeThread.getName() + " has been closed!");
 			}
 		}
-		// 结束主逻辑线程
+	}
+	private static void closeMainThread(){
 		if(mainThread != null){
 			if(mainThread.isAlive()){
 				mainThread.stop(); 
 				FASLogger.info(mainThread.getName() + " has been closed!");
 			}
-		}
-		// 关闭FAS通讯
+		}}
+	private static void closeFAS(){
 		if(machine != null){
 			if(machine.getFireAlarmSystem() != null){
 				if(machine.getFireAlarmSystem().getFasCommChan() != null){
@@ -223,9 +227,18 @@ public class FASInterfaceMain {
 				}
 			}
 		}
-		// 关闭FCMP通讯
+	}
+	private static void closeFCMP(){
 		if(machine != null){
 			if(machine.getFCMPChan() != null){
+				// 关闭接受数据线程
+				if(machine.getFCMPReceiveThread() != null){
+					if(machine.getFCMPReceiveThread().isAlive()){
+						machine.getFCMPReceiveThread().stop(); 
+						FASLogger.info(machine.getFCMPReceiveThread().getName() + " has been closed!");
+					}
+				}
+				// 关闭通讯
 				machine.getFCMPChan().closeCommChannel();
 				FASLogger.info("Disconnect with FCMP program!");
 			}
@@ -236,8 +249,6 @@ public class FASInterfaceMain {
 		System.out.println("*** FAS interface with Siemens FS20. ***\n"
 				+ "All commands:\n"
 				+ "\t FASStatus or fs --- Show the status of zones and devices\n"
-				+ "\t FASZoneStatus or fz --- Show the status of zones\n"
-				+ "\t FASDeviceStatus or fd --- Show the status of devices\n"
 				+ "\t FASConnStatus --- A tip of checking the connection status with the Siemens FAS panel\n"
 				+ "\t GetFCMPClients or gc --- Show all the FCMP clients' address\n"
 				+ "\t GetFCMPServers or gs --- Show all the FCMP servers' address\n"

@@ -1,4 +1,4 @@
-package FASException;
+package fasException;
 
 public class NoAvailablePortException extends Exception{
 	

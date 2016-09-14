@@ -33,6 +33,5 @@
 	<classpathentry kind="lib" path="C:/Users/JackL/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar"/>
 	<classpathentry kind="lib" path="E:/0 工作/通号院/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/JackL/workspace/VariableTimerV1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/JackL/workspace/FASRecoveryMsg.jar" sourcepath="/FASRecoveryMsg"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

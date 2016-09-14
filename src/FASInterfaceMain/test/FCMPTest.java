@@ -1,6 +1,6 @@
 package FASInterfaceMain.test;
 
-import communication.FCMPChannel;
+import fcmpCommunication.FCMPChannel;
 
 public class FCMPTest {
 	public static void main(String args[]) throws Exception{

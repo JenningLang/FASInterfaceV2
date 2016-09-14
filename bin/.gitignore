@@ -1,3 +1,8 @@
+/Enum/
+/FAS/
+/FASInterfaceMain/
+/FCMP/
+/com/
 /AnnexFEncodingTest.class
 /BacnetTest$Listener.class
 /BacnetTest.class
@@ -6,11 +11,6 @@
 /DeserializationTest.class
 /DiscoveryTest$Listener.class
 /DiscoveryTest.class
-/Enum/
-/FAS/
-/FASException/
-/FASInterfaceMain/
-/FCMP/
 /FileAccessTest.class
 /LargeSegmentTest.class
 /LoopDevice$1.class
@@ -37,6 +37,8 @@
 /ThresholdCalculatorTest.class
 /TrendLogTest.class
 /UdpDump.class
-/com/
 /communication/
+/fasException/
+/fasMessage/
 /fasUtil/
+/fcmpCommunication/

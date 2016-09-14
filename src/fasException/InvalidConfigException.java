@@ -1,4 +1,4 @@
-package FASException;
+package fasException;
 
 public class InvalidConfigException extends Exception{
 	public InvalidConfigException(){

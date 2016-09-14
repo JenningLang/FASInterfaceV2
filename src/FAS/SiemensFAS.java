@@ -1,6 +1,7 @@
 package FAS;
 
 import FASInterfaceMain.*;
+import fasException.*;
 import fasUtil.ConfigUtil;
 
 import java.util.ArrayList;
@@ -14,9 +15,9 @@ import com.serotonin.bacnet4j.service.confirmed.ReadPropertyRequest;
 import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
-import com.FASRecoveryMsg.Enum.*;
+
+import Enum.bacnetValueEnum;
 import FAS.SibX.SiemensConfig;
-import FASException.*;
 
 public class SiemensFAS {
 	private String siemensFASIP; // FAS 主机 ip
@@ -24,10 +25,8 @@ public class SiemensFAS {
 	private String interfaceFASIP; // 接口机 ip
 	private int interfaceFASID; // 接口机的BACnet ID
 	
-	private List<FASZone> localFASZone; // 区间列表
-	boolean hasZoneInit = false; // 是否已经从xml文档中读取了zone 配置
-	private List<FASDevice> localFASDevice; // 设备列表
-	boolean hasDeviceInit = false; // 是否已经从xml文档中读取了device 配置
+	private List<FASNode> fasNodeList; // 区间列表
+	private boolean hasInit = false; // 是否已经从xml文档中读取了zone 配置
 	
 	private FASCommChannel fasCommChan; // 存储了 network, transport, siemensFASDevice 和 interfaceFASDevice 对象
 	
@@ -35,7 +34,7 @@ public class SiemensFAS {
 	
 	// 构造函数
 	public SiemensFAS() 
-			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigZoneAndDeviceException{
+			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		siemensFASIP = ConfigUtil.getSiemensFASIP();
 		interfaceFASIP = ConfigUtil.getInterfaceFASIP();
 		siemensFASID = ConfigUtil.getSiemensFASID();
@@ -43,7 +42,7 @@ public class SiemensFAS {
 		SiemensFASInit(interfaceFASIP, interfaceFASID, siemensFASIP, siemensFASID);
 	}
 	public SiemensFAS(String interfaceFASIP, int interfaceFASID, String siemensFASIP, int siemensFASID) 
-			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigZoneAndDeviceException{
+			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		this.interfaceFASIP = interfaceFASIP;
 		this.interfaceFASID = interfaceFASID;
 		this.siemensFASIP = siemensFASIP;
@@ -53,7 +52,7 @@ public class SiemensFAS {
 	
 	// 设备连接，SibX文件读取，状态变量初始化
 	public void SiemensFASInit(String interfaceFASIP, int interfaceFASID, String siemensFASIP, int siemensFASID) 
-			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigZoneAndDeviceException{
+			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		/* ************************************************ 
 		 *        与 FAS 主机通信信道创建于初始化                              *
 		 ************************************************ */
@@ -63,148 +62,102 @@ public class SiemensFAS {
 		 * 通过 FASCommChannel 和西门子xml文档来获取设备信息  *
 		 * 初始化 localFASZone 和 LocalFASDevice            *
 		 ************************************************ */
-		localFASZone = new ArrayList<FASZone>();
-		localFASDevice = new ArrayList<FASDevice>();
+		fasNodeList = new ArrayList<FASNode>();
 		try {
-			SiemensConfig.configZoneAndDevice(localFASZone, localFASDevice);
-			hasZoneInit = true;
-			hasDeviceInit = true;
+			SiemensConfig.configFASNodes(fasNodeList);
 		} catch (Exception e) {
 			logger.debug(e.getMessage(), e);
-			throw new ConfigZoneAndDeviceException();
+			throw new ConfigFASNodeException();
 		}
+		hasInit = true;
 		/* ******************* 
 		 * 刷新报警和故障信息   *
 		 ******************* */
-		LocalFASRefresh();
+		refreshLocalFAS();
 	}
 	
 	// 通过 FASCommChannel 和西门子xml文档刷新区间和设备信息
-	public void LocalFASRefresh(){
-		LocalFASZoneRefresh();
-		LocalFASDeviceRefresh();
-	}
-	public void LocalFASZoneRefresh(){
-		// 通过 FASCommChannel 和西门子xml文档刷新区间信息
-		if(!hasZoneInit){ // 当区间分区信息未加载
-			try {
-				SiemensConfig.configZoneAndDevice(localFASZone, localFASDevice);
-			} catch (Exception e) {
+	public void refreshLocalFAS() throws ConfigFASNodeException{
+		if(!hasInit){ // 当配置信息未加载
+			try{
+				SiemensConfig.configFASNodes(fasNodeList);
+			}catch(Exception e){
 				logger.debug(e.getMessage(), e);
+				throw new ConfigFASNodeException();
 			}
-			hasZoneInit = true;
-			hasDeviceInit = true;
+			hasInit = true;
 		}
-		// 分区火警状态刷新
-		localFASZone.forEach(zone -> zone.setAlarmStatus(getZoneStatusByInstantNumber(zone.getInstantNumber())));
+		// 状态刷新
+		fasNodeList.forEach(node -> {
+			node.setNodeStatus(getNodeStatusByInstantNumber(node.getObjType(), node.getInstantNumber()));
+		});
 	}
-	public void LocalFASDeviceRefresh(){
-		// 通过 FASCommChannel 和西门子xml文档刷新设备信息
-		if(!hasDeviceInit){ // 当设备信息未加载
-			try {
-				SiemensConfig.configZoneAndDevice(localFASZone, localFASDevice);
-			} catch (Exception e) {
-				logger.debug(e.getMessage(), e);
-			}
-			hasZoneInit = true;
-			hasDeviceInit = true;
-		}
-		// 设备故障状态刷新
-		localFASDevice.forEach(device -> device.setFaultStatus(getDeviceStatusByInstantNumber(device.getInstantNumber())));
-	}
-
-	// 读取区间或设备状态
-	public ZoneAndDeviceStatusEnum getZoneStatusByID(String zoneID)
+	
+	// 读取节点状态
+	public String getNodeStatusByID(String nodeID)
 	{
-		for(FASZone zone: localFASZone){
-			if(zone.getZoneID().toLowerCase() == zoneID.toLowerCase()){
-				return getZoneStatusByInstantNumber(zone.getInstantNumber());
+		for(FASNode node: fasNodeList){
+			if(node.getNodeID().toLowerCase().equals(nodeID.toLowerCase())){
+				return getNodeStatusByInstantNumber(node.getObjType(), node.getInstantNumber());
 			}
 		}
-		return ZoneAndDeviceStatusEnum.Unknown;
-	}
-	public ZoneAndDeviceStatusEnum getDeviceStatusByID(String deviceID)
-	{
-		for( FASDevice device : localFASDevice ){
-			if(device.getDeviceID().toLowerCase() == deviceID.toLowerCase()){
-				return getZoneStatusByInstantNumber(device.getInstantNumber());
-			}
-		}
-		return ZoneAndDeviceStatusEnum.Unknown;
+		return bacnetValueEnum.toString(-1);
 	}
 	
 	/* ************************************************************************** */
-	public ZoneAndDeviceStatusEnum getZoneStatusByInstantNumber(int instantNumber)
+	public String getNodeStatusByInstantNumber(ObjectType objType, int instantNumber)
 	{
 		// 实时的读取FAS区间的报警信息
 		try{
 			ReadPropertyAck ack = (ReadPropertyAck)fasCommChan.getInterfaceFASDevice().send(
 					fasCommChan.getSiemensFASDevice(), 
 			    	new ReadPropertyRequest(
-			    			new ObjectIdentifier(ObjectType.lifeSafetyZone, instantNumber), 
+			    			new ObjectIdentifier(objType, instantNumber), 
 			    			PropertyIdentifier.trackingValue)
 			    	);
-			String value = ack.getValue().toString().trim().toLowerCase();
-			logger.debug("Zone: " + instantNumber + ": " + value);
-			return getStatusFromString(value);
+			String value = bacnetValueEnum.toString(
+						extractNumber(
+								ack.getValue().toString().trim().toLowerCase()
+						)
+					);
+			logger.debug("Node: " + instantNumber + ": " + value);
+			return value;
 		}catch(Exception e){
 			logger.debug("In " + this.getClass().getName());
-			logger.debug("Get zone status error, instance number: " + instantNumber);
+			logger.debug("Get node status error, instance number: " + instantNumber);
 			logger.debug(e.getMessage(), e);
 		}
-		return ZoneAndDeviceStatusEnum.Unknown;
-	}
-	public ZoneAndDeviceStatusEnum getDeviceStatusByInstantNumber(int instantNumber)
-	{
-		// 实时的读取FAS设备的故障信息
-		try{
-			ReadPropertyAck ack = (ReadPropertyAck)fasCommChan.getInterfaceFASDevice().send(
-					fasCommChan.getSiemensFASDevice(), 
-			    	new ReadPropertyRequest(
-			    			new ObjectIdentifier(ObjectType.lifeSafetyPoint, instantNumber), 
-			    			PropertyIdentifier.trackingValue)
-			    	);
-			String value = ack.getValue().toString().trim().toLowerCase();
-			logger.debug("Device: " + instantNumber + ": " + value);
-			return getStatusFromString(value);
-		}catch(Exception e){
-			logger.debug("In " + this.getClass().getName());
-			logger.debug("Get zone status error, instance number: " + instantNumber);
-			logger.debug(e.getMessage(), e);
-		}
-		return ZoneAndDeviceStatusEnum.Unknown;
+		return bacnetValueEnum.toString(-1);
 	}
 	
-	private ZoneAndDeviceStatusEnum getStatusFromString(String s) {
-		s = s.toLowerCase();
-		if(s.contains("alarm")){
-			return ZoneAndDeviceStatusEnum.Alarm;
-		}else if(s.contains("fault")){
-			return ZoneAndDeviceStatusEnum.Fault;
-		}else if(s.contains("quiet")){
-			return ZoneAndDeviceStatusEnum.Normal;
-		}else{
-			return ZoneAndDeviceStatusEnum.Unknown;
+	/** 
+	 * 从一个字符串中取出非数字，并转换为整数
+	 */
+	private int extractNumber(String s){
+		s = (s == null) ? "" : s;
+		String str = "";
+		for(int i = 0; i < s.length(); i++){
+			if(s.charAt(i) <= '9' && s.charAt(i) >= '0'){
+				str += s.charAt(i);
+			}
 		}
+		str = (str.equals(""))? "-1" : str; // -1 表示unknown
+		return Integer.parseInt(str);
 	}
 	/* ************************************************************************** */
-	
-	public void printFASStatus(){
-		System.out.println("Status of zones:");
-		printFASZoneStatus();
-		System.out.println("Status of devices:");		
-		printFASDeviceStatus();
+	/**
+	 * 打印所有FAS节点信息
+	 * */
+	public void printFASStatus(boolean treeFlag) throws ConfigFASNodeException {
+		if(treeFlag){  /////// here needs to be revised 
+			refreshLocalFAS();
+			fasNodeList.forEach(node -> System.out.println(node.toString()));
+		}else{
+			refreshLocalFAS();
+			fasNodeList.forEach(node -> System.out.println(node.toString()));
+		}
 	}
 	
-	public void printFASZoneStatus(){
-		LocalFASZoneRefresh();
-		localFASZone.forEach(zone -> System.out.println(zone.toString()));
-	}	
-	
-	public void printFASDeviceStatus(){
-		LocalFASDeviceRefresh();
-		localFASDevice.forEach(device -> System.out.println(device.toString()));
-	}
 	// getters and setters
 	public String getSiemensFASIP() {
 		return siemensFASIP;
@@ -230,17 +183,11 @@ public class SiemensFAS {
 	public void setInterfaceFASID(int interfaceFASID) {
 		this.interfaceFASID = interfaceFASID;
 	}
-	public List<FASZone> getLocalFASZone() {
-		return localFASZone;
+	public List<FASNode> getFasNodeList() {
+		return fasNodeList;
 	}
-	public void setLocalFASZone(List<FASZone> localFASZone) {
-		this.localFASZone = localFASZone;
-	}
-	public List<FASDevice> getLocalFASDevice() {
-		return localFASDevice;
-	}
-	public void setLocalFASDevice(List<FASDevice> localFASDevice) {
-		this.localFASDevice = localFASDevice;
+	public void setFasNodeList(List<FASNode> fasNodeList) {
+		this.fasNodeList = fasNodeList;
 	}
 	public FASCommChannel getFasCommChan() {
 		return fasCommChan;

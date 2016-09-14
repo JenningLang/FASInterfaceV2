@@ -1,35 +1,39 @@
 package FASInterfaceMain;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
 import FAS.*;
-import FASException.*;
 import FCMP.RecvMessage;
 import FCMP.SendMessage;
-import communication.FCMPChannel;
-import com.FASRecoveryMsg.Message.*;
+import fasException.*;
+import fasMessage.*;
 import fasUtil.*;
-
-import com.FASRecoveryMsg.Enum.*;
+import fcmpCommunication.FCMPChannel;
+import Enum.*;
 
 public class FASInterfaceMachine implements Runnable{
 	private SiemensFAS fireAlarmSystem;
 	private FCMPChannel FCMPChan;
+	private Thread fcmpReceiveThread;
+	
+	private Queue<RecvMessage> fcmpMQ = FCMPChannel.getMessageQueue();
 	private Logger logger = FASInterfaceMain.FASLogger;
 
 	/**
 	 * 这里之所以捕捉异常并再次抛出，是为了防止创建到一半时报错，但上一层函数无法释放已经初始化的资源
 	 * */
 	public FASInterfaceMachine() 
-			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigZoneAndDeviceException, 
+			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException, 
 			FCMPInitialException{
 		// 创建 FAS 对象
 		try{
 			fireAlarmSystem = new SiemensFAS();
-		}catch(FASLocalDeviceInitException | FASRemoteDeviceConnException | ConfigZoneAndDeviceException e){
+		}catch(FASLocalDeviceInitException | FASRemoteDeviceConnException | ConfigFASNodeException e){
 			fireAlarmSystem.getFasCommChan().closeCommChannel();
 			throw e;
 		}
@@ -40,149 +44,112 @@ public class FASInterfaceMachine implements Runnable{
 			fireAlarmSystem.getFasCommChan().closeCommChannel();
 			throw e;
 		}
+		// 运行FCMP接受数据线程
+		fcmpReceiveThread = new Thread(FCMPChan, "FCMPReceiveThread");
+		fcmpReceiveThread.start();
 	}
 	
+	/**
+	 * 主逻辑
+	 * @author JenningLang
+	 * */
 	@Override
 	public void run(){
-		List<FCMP.Address> addrList = new LinkedList<FCMP.Address>();
 		RecvMessage rmsg = new RecvMessage();
-		
 		while(true){
-			addrList.clear(); // 虽然只有一个地址，但该方法的输入地址是List，所以每次传输都添加和清空List
 			// 收消息
-			if(FCMPChan.getCommChannel().recvMsg(rmsg)){
-				// 消息的具体处理过程
-				String smsgContent;
-				JsonMessageBean jmb = new JsonMessageBean();
-				
-				FCMP.Address rmsgAddr = rmsg.getAddress();
-				String rmsgStr = rmsg.getMsg();
-				logger.debug("Message received from: " + 
-						rmsgAddr.toString());
-				logger.debug("Message content: " + 
-						rmsgStr);
-				RecoveryMessage rmsgClass = RecoveryMessage.recoveryFromString(rmsgStr);
-				if(rmsgClass != null && rmsgClass.getFrom() == MsgFromEnum.Server){
-					// 返回给 server 的 message
-					SendMessage smsg = new SendMessage();
-					addrList.add(rmsg.getAddress());
-					smsg.setAddresses(addrList);
-					/* ****************
-					 * 
-					 * 配置信息请求处理
-					 * 
-					 * ****************/
-					if(rmsgClass.getType() == MsgTypeEnum.SysConfigReq){
-						for(FASZone zone : fireAlarmSystem.getLocalFASZone()){
-							SysConfigReplyMsg smsgClass = new SysConfigReplyMsg(
-										rmsgClass.getFlag(), 
-										NodeEnum.Zone,
-										zone.getZoneID(),
-										zone.getZoneDescription()
-									);
-							smsgContent = smsgClass.object2String();
-							jmb.setFrom("FAS");
-							jmb.setType("");
-							jmb.setTime("");
-							jmb.setContent(smsgContent);
-							smsg.setMsg(JsonUtil.toJSON(jmb));
-							FCMPChan.getCommChannel().sendMsg(smsg);
-						}
-						for(FASDevice device : fireAlarmSystem.getLocalFASDevice()){
-							SysConfigReplyMsg smsgClass = new SysConfigReplyMsg(
-										rmsgClass.getFlag(), 
-										NodeEnum.Device,
-										device.getDeviceID(),
-										device.getDeviceDescription()
-									);
-							smsgContent = smsgClass.object2String();
-							jmb.setFrom("FAS");
-							jmb.setType("");
-							jmb.setTime("");
-							jmb.setContent(smsgContent);
-							smsg.setMsg(JsonUtil.toJSON(jmb));
-							FCMPChan.getCommChannel().sendMsg(smsg);
-						}
-						// 发送 Finish
-						SysConfigReplyMsg smsgClass = new SysConfigReplyMsg(
-								rmsgClass.getFlag(), 
-								NodeEnum.Finish,
-								null,
-								null
-								);
-						smsgContent = smsgClass.object2String();
-						jmb.setFrom("FAS");
-						jmb.setType("");
-						jmb.setTime("");
-						jmb.setContent(smsgContent);
-						smsg.setMsg(JsonUtil.toJSON(jmb));
-						FCMPChan.getCommChannel().sendMsg(smsg);
+			if(!fcmpMQ.isEmpty()){
+				rmsg = fcmpMQ.poll(); // 消息体
+				FCMP.Address rmsgAddr = rmsg.getAddress();  // 消息地址
+				String rmsgStr = rmsg.getMsg(); // 消息内容，String
+				logger.debug("Message received from: " + rmsgAddr.toString());
+				logger.debug("Message content: " + rmsgStr);
+				// 消息内容预处理，将消息变为对应的类
+				FASMessage rmsgClass = null;
+				try{
+					if(rmsgStr.contains(MsgTypeEnum.ConfigReq.toString())){
+						rmsgClass = JsonUtil.fromJSON(rmsgStr, ConfigReqMsg.class);
+					}else if(rmsgStr.contains(MsgTypeEnum.StatusReq.toString())){
+						rmsgClass = JsonUtil.fromJSON(rmsgStr, StatusReqMsg.class);
+					}else{
+						throw new Exception();
 					}
-					/* ******************************
-					 * 
-					 * 区域报警 和 设备故障 信息请求处理
-					 * 
-					 * *****************************/
-					else if(rmsgClass.getType() == MsgTypeEnum.StatusReq){
-						// 刷新信息
-						fireAlarmSystem.LocalFASRefresh();
-						for(FASZone zone : fireAlarmSystem.getLocalFASZone()){
-							StatusReplyMsg smsgClass = new StatusReplyMsg(
-										rmsgClass.getFlag(), 
-										NodeEnum.Zone,
-										zone.getZoneID(),
-										zone.getAlarmStatus()
-									);
-							smsgContent = smsgClass.object2String();
-							jmb.setFrom("FAS");
-							jmb.setType("");
-							jmb.setTime("");
-							jmb.setContent(smsgContent);
-							smsg.setMsg(JsonUtil.toJSON(jmb));
-							FCMPChan.getCommChannel().sendMsg(smsg);
-						}
-						for(FASDevice device : fireAlarmSystem.getLocalFASDevice()){
-							StatusReplyMsg smsgClass = new StatusReplyMsg(
-										rmsgClass.getFlag(), 
-										NodeEnum.Device,
-										device.getDeviceID(),
-										device.getFaultStatus()
-									);
-							smsgContent = smsgClass.object2String();
-							jmb.setFrom("FAS");
-							jmb.setType("");
-							jmb.setTime("");
-							jmb.setContent(smsgContent);
-							smsg.setMsg(JsonUtil.toJSON(jmb));
-							FCMPChan.getCommChannel().sendMsg(smsg);
-						}
-						// 发送 Finish
-						StatusReplyMsg smsgClass = new StatusReplyMsg(
-								rmsgClass.getFlag(), 
-								NodeEnum.Finish,
-								null,
-								null
-								);
-						smsgContent = smsgClass.object2String();
-						jmb.setFrom("FAS");
-						jmb.setType("");
-						jmb.setTime("");
-						jmb.setContent(smsgContent);
-						smsg.setMsg(JsonUtil.toJSON(jmb));
-						FCMPChan.getCommChannel().sendMsg(smsg);
-					} else{
-						logger.warn(
-								"A wrong request " + rmsgStr + " from the server:" + rmsgAddr);
+				}catch(Exception e){
+					// 发回错误信息
+					sendMessage(JsonUtil.toJSON(new ErrorInfoMsg("Error Info: Bad request!: " + rmsgStr)), 
+							rmsgAddr);
+					logger.info("Error Info: Bad request!: " + rmsgStr);
+					logger.error(e.getMessage(), e);
+					continue;
+				}
+				/*** 消息已经被转为类，分类处理 --- 主逻辑 ***/
+				if(rmsgClass.getClass().equals(ConfigReqMsg.class)){ // 配置信息请求处理
+					for(FASNode node : fireAlarmSystem.getFasNodeList()){
+						ConfigReplyMsg smsgClass = 
+								new ConfigReplyMsg(node.getNodeType(), node.getNodeID(), node.getNodeDescription(), 
+										node.getFatherNodeID(), node.getChildNodeIDList());
+						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
 					}
+					// 发送 Finish
+					ConfigReplyMsg smsgClass = new ConfigReplyMsg(NodeEnum.Finish, null, null, null, new ArrayList<String>());
+					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+				}else if(rmsgClass.getClass().equals(StatusReqMsg.class)){ // 区域报警 和 设备故障 信息请求处理
+					// 刷新信息
+					try{
+						fireAlarmSystem.refreshLocalFAS();
+					}catch(ConfigFASNodeException e){
+						// 发回错误信息
+						sendMessage(JsonUtil.toJSON(new ErrorInfoMsg("ConfigFASNodeException")), 
+								rmsgAddr);
+						logger.info("ConfigFASNodeException");
+						logger.error(e.getMessage(), e);
+						continue;
+					}
+					// 逐条发送 node 状态信息
+					for(FASNode node : fireAlarmSystem.getFasNodeList()){
+						StatusReplyMsg smsgClass = new StatusReplyMsg(node.getNodeType(), 
+								node.getNodeID(), 
+								node.getNodeStatus());
+						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+					}
+					// 发送 Finish
+					StatusReplyMsg smsgClass = new StatusReplyMsg(NodeEnum.Finish, null, null);
+					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
 				}
 			}
 		}
 	}
+	
+	/**
+	 * 封装了发送消息过程
+	 * */
+	private void sendMessage(String msgStr, FCMP.Address addr){
+		SendMessage smsg = new SendMessage();
+		// address
+		List<FCMP.Address> addrList = new LinkedList<FCMP.Address>();
+		addrList.add(addr);
+		smsg.setAddresses(addrList);
+		// content
+		JsonMessageBean jmb = new JsonMessageBean();
+		jmb.setFrom("FAS");
+		jmb.setType("");
+		jmb.setTime("");
+		jmb.setContent(msgStr);
+		smsg.setMsg(JsonUtil.toJSON(jmb));
+		// send
+		FCMPChan.getCommChannel().sendMsg(smsg);
+	} 
+	
+	// getters
 	public SiemensFAS getFireAlarmSystem() {
 		return fireAlarmSystem;
 	}
 	
 	public FCMPChannel getFCMPChan() {
 		return FCMPChan;
+	}
+	
+	public Thread getFCMPReceiveThread(){
+		return fcmpReceiveThread;
 	}
 }

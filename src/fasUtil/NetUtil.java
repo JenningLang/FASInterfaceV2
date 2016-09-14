@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import FASException.NoAvailablePortException;
+import fasException.NoAvailablePortException;
 
 public class NetUtil {
 

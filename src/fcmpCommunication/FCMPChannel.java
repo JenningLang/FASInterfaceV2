@@ -1,14 +1,20 @@
-package communication;
+package fcmpCommunication;
 
 import org.apache.log4j.Logger;
 
-import FASException.FCMPInitialException;
 import FCMP.Communication;
+import fasException.FCMPInitialException;
 import fasUtil.ConfigUtil;
+import FCMP.RecvMessage;
 
-public class FCMPChannel{
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class FCMPChannel implements Runnable{
 	
 	private Communication commChannel;
+	private static Queue<RecvMessage> messageQueue = new LinkedList<RecvMessage>();// 消息队列
+	
 	private Logger logger = FASInterfaceMain.FASInterfaceMain.FASLogger;
 	
 	public FCMPChannel() throws FCMPInitialException{
@@ -19,7 +25,29 @@ public class FCMPChannel{
 			throw new FCMPInitialException();
 		}
 	}
+
+	/**
+	 * 
+	 * 接收消息线程
+	 * 
+	 * */
+	@Override
+	public void run() {
+		logger.info("FCMP receiving thread starts...");
+		while(true){
+			RecvMessage rmsg = new RecvMessage();
+			if(commChannel.recvMsg(rmsg)){
+				messageQueue.add(rmsg);
+				logger.debug(rmsg.getAddress());
+				logger.debug(rmsg.getMsg());
+			}
+		}
+		
+	}
 	
+	/**
+	 * 关闭FCMP通信
+	 * */
 	public void closeCommChannel(){
 		if(commChannel != null){
 			commChannel.close();
@@ -34,4 +62,9 @@ public class FCMPChannel{
 	public Communication getCommChannel(){
 		return this.commChannel;
 	}
+	
+	public static Queue<RecvMessage> getMessageQueue(){
+		return messageQueue;
+	}
+
 }

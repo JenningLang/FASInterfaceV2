@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
+
+	<!-- 西门子FAS主机配置 -->
+	<StationID>
+		2200
+	</StationID>
 	<!-- 西门子FAS主机配置 -->
 	<FASConfig>
 	    <!-- FAS主机ip地址 -->
