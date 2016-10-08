@@ -3,6 +3,10 @@
 /FASInterfaceMain/
 /FCMP/
 /com/
+/fasException/
+/fasMessage/
+/fasUtil/
+/fcmpCommunication/
 /AnnexFEncodingTest.class
 /BacnetTest$Listener.class
 /BacnetTest.class
@@ -37,8 +41,3 @@
 /ThresholdCalculatorTest.class
 /TrendLogTest.class
 /UdpDump.class
-/communication/
-/fasException/
-/fasMessage/
-/fasUtil/
-/fcmpCommunication/

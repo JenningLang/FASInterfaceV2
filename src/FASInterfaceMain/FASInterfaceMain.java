@@ -96,7 +96,7 @@ public class FASInterfaceMain {
 		FASLogger.info("'Interface' machine building succeed!");
 		System.out.println("");
 		
-		// 2 握手进程创建与启动
+		///////////////////////////// 2 握手进程创建与启动  ///////////////////////////// 
 		FASLogger.info("2 **************************************************");
 		FASLogger.info("Starting handshake with Siemens FAS panel...");
 		handShakeThread = new Thread(
@@ -118,7 +118,7 @@ public class FASInterfaceMain {
 		FASLogger.info("Handshake building succeed!");
 		System.out.println("");
 		
-		// 3 启动主进程
+		/////////////////////////////  3 启动主进程    ///////////////////////////// 
 		FASLogger.info("3 **************************************************");
 		FASLogger.info("Starting the 'Interface' machine...");
 		mainThread = new Thread(machine, "FASMainThread");

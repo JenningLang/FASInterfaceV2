@@ -115,6 +115,7 @@ public class SiemensFAS {
 			    			new ObjectIdentifier(objType, instantNumber), 
 			    			PropertyIdentifier.trackingValue)
 			    	);
+			System.out.println(ack.getValue());
 			String value = bacnetValueEnum.toString(
 						extractNumber(
 								ack.getValue().toString().trim().toLowerCase()
