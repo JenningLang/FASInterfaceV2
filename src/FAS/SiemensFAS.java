@@ -16,6 +16,7 @@ import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 
+import Enum.NodeEnum;
 import Enum.bacnetValueEnum;
 import FAS.SibX.SiemensConfig;
 
@@ -160,14 +161,46 @@ public class SiemensFAS {
 	 * 打印所有FAS节点信息
 	 * */
 	public void printFASStatus(boolean treeFlag) throws ConfigFASNodeException {
-		if(treeFlag){  /////// here needs to be revised 
+		if(treeFlag){
+			// TODO here needs to be revised 
 			refreshLocalFAS();
-			fasNodeList.forEach(node -> System.out.println(node.toString()));
+			for(FASNode node: fasNodeList){
+				if(node.getNodeType().equals(NodeEnum.Area)){
+					treePrint(0, node.getNodeID());
+				}
+			}
 		}else{
 			refreshLocalFAS();
 			fasNodeList.forEach(node -> System.out.println(node.toString()));
 		}
 	}
+	/**
+	 * 迭代的树状打印
+	 * */
+	private void treePrint(int spaceNum, String nodeID){
+		if(fasNodeList.size() == 0)
+			return;
+		int nodeIndex = 0;
+		for(FASNode node: fasNodeList){
+			if(node.getNodeID().equals(nodeID)){
+				nodeIndex = fasNodeList.indexOf(node);
+				break;
+			}
+		}
+		for(int i = 0; i < spaceNum; i++){
+			System.out.print(" ");
+		}
+		System.out.print("|-");
+		String temp = fasNodeList.get(nodeIndex).getNodeID() + 
+				":" + fasNodeList.get(nodeIndex).getNodeStatus();
+		System.out.print(temp);
+		System.out.print("-");
+		System.out.println("");
+		for(String childNodeID: fasNodeList.get(nodeIndex).getChildNodeIDList()){
+			treePrint(spaceNum + 2 + (temp.length() >> 1), childNodeID);
+		}
+	}
+	
 	
 	// getters and setters
 	public String getSiemensFASIP() {
