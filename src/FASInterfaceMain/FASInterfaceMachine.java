@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class FASInterfaceMachine implements Runnable{
 	private FCMPChannel FCMPChan;
 	private Thread fcmpReceiveThread;
 	
-	private Queue<RecvMessage> fcmpMQ = FCMPChannel.getMessageQueue();
+	private BlockingQueue<RecvMessage> fcmpMQ = FCMPChannel.getMessageQueue();
 	private Logger logger = FASInterfaceMain.FASLogger;
 
 	/**
@@ -44,21 +45,21 @@ public class FASInterfaceMachine implements Runnable{
 			fireAlarmSystem.getFasCommChan().closeCommChannel();
 			throw e;
 		}
-		// 运行FCMP接受数据线程
+		// 运行FCMP接收数据线程
 		fcmpReceiveThread = new Thread(FCMPChan, "FCMPReceiveThread");
 		fcmpReceiveThread.start();
 	}
 	
 	/**
 	 * 主逻辑
-	 * @author JenningLang
+	 * @author ZhenningLang
 	 * */
 	@Override
 	public void run(){
 		RecvMessage rmsg = new RecvMessage();
 		while(true){
 			// 收消息
-			if(!fcmpMQ.isEmpty()){
+			if(!fcmpMQ.isEmpty()){ // 如果不做这个判断，那么当队列为空时该进程会阻塞
 				rmsg = fcmpMQ.poll(); // 消息体
 				FCMP.Address rmsgAddr = rmsg.getAddress();  // 消息地址
 				String rmsgStr = rmsg.getMsg(); // 消息内容，String

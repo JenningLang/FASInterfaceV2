@@ -75,6 +75,7 @@ public class FASCommChannel {
 			    		new Address(siemensFASIP, 0xbac0), null, siemensFASID); 
 		    	break; // 成功就退出循环
 			}catch(Exception e) {
+				// 失败就重新连接，共尝试5次
 		    	interfaceFASDevice.terminate();
 		    	if(reConnCounter >= 6){
 		    		throw new FASRemoteDeviceConnException();
@@ -95,12 +96,10 @@ public class FASCommChannel {
 		    	logger.info("Reconnecting the Siemens FAS device...");
 		    }
 		}
+	    
 		/* ************************************
 		 *   通信初始化: 广播 I am              *
 		 *   首次查询 device description       *
-		 *            Step 2                  *
-		 *   启动握手进程                                                           *
-		 *   每隔25s查询一次 device description *
 		 ************************************ */
 	    
 		// 通信初始化: 广播 I am
@@ -114,11 +113,10 @@ public class FASCommChannel {
 		            new UnsignedInteger(1))
 			);
 			Thread.sleep(1000); // 给FAS主机一段时间做客户端地址绑定
-	    }catch(Exception e){
-			
-		}
+	    }catch(Exception e){}
 	    
 		// 首次查询 device description，如果是第一次启动FAS报警主机必然异常！！！
+	    // 异常后什么都不需要处理，只需要重启本地设备即可
 		try{
 			logger.debug("Tring the first property reading from the Siemens FAS panel!");
 			AcknowledgementService ack = interfaceFASDevice.send(

@@ -33,7 +33,7 @@ public class SiemensFAS {
 	private Logger logger = FASInterfaceMain.FASLogger;
 	
 	// 构造函数
-	public SiemensFAS() 
+	public SiemensFAS()
 			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		siemensFASIP = ConfigUtil.getSiemensFASIP();
 		interfaceFASIP = ConfigUtil.getInterfaceFASIP();
@@ -62,7 +62,7 @@ public class SiemensFAS {
 		 * 通过 FASCommChannel 和西门子xml文档来获取设备信息  *
 		 * 初始化 localFASZone 和 LocalFASDevice            *
 		 ************************************************ */
-		fasNodeList = new ArrayList<FASNode>();
+		fasNodeList = new ArrayList<FASNode>(); // 所有火灾点位信息
 		try {
 			SiemensConfig.configFASNodes(fasNodeList);
 		} catch (Exception e) {
@@ -115,12 +115,13 @@ public class SiemensFAS {
 			    			new ObjectIdentifier(objType, instantNumber), 
 			    			PropertyIdentifier.trackingValue)
 			    	);
-			System.out.println(ack.getValue());
-			String value = bacnetValueEnum.toString(
-						extractNumber(
-								ack.getValue().toString().trim().toLowerCase()
-						)
-					);
+			String ackStr = ack.getValue().toString().trim().toUpperCase();
+			String value = null;
+			if(containNumber(ackStr)){
+				value = bacnetValueEnum.toString(extractNumber(ackStr));
+			}else{
+				value = bacnetValueEnum.toString(ackStr);
+			}
 			logger.debug("Node: " + instantNumber + ": " + value);
 			return value;
 		}catch(Exception e){
@@ -144,6 +145,15 @@ public class SiemensFAS {
 		}
 		str = (str.equals(""))? "-1" : str; // -1 表示unknown
 		return Integer.parseInt(str);
+	}
+	private boolean containNumber(String s){
+		s = (s == null) ? "" : s;
+		for(int i = 0; i < s.length(); i++){
+			if(s.charAt(i) <= '9' && s.charAt(i) >= '0'){
+				return true;
+			}
+		}
+		return false;
 	}
 	/* ************************************************************************** */
 	/**

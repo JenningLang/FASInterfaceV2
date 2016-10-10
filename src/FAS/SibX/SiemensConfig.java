@@ -16,7 +16,10 @@ import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import Enum.*;
 import FAS.FASNode;
 
-
+/**
+ * 用于读取西门子SibX配置文件
+ * @author ZhenningLang
+ * */
 public class SiemensConfig {
 	private static String sibxFileName;
 	private static int panelNumber;

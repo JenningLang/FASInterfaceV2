@@ -4,7 +4,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import Enum.MsgTypeEnum;
 import fasMessage.msgContent.MsgContentNull;
-import fasUtil.ConfigUtil;
 
 public class StatusReqMsg extends FASMessage{
 

@@ -1,6 +1,8 @@
 package Enum;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class bacnetValueEnum {
@@ -32,6 +34,7 @@ public class bacnetValueEnum {
 	
 
 	private static Map<Integer, String> valueMap;
+	private static List<String> valueList;
 	
 	private bacnetValueEnum(){
 		valueMap = new HashMap<Integer, String>();
@@ -52,11 +55,38 @@ public class bacnetValueEnum {
 		valueMap.put(258, "ISA_EXTINGUISHING_WARNING");
 		valueMap.put(259, "ISA_EXTINGUISHING_RELEASED");
 		valueMap.put(267, "ISA_NON_DEFAULT_MODE");
+		
+		valueList = new ArrayList<String>();
+		valueList.add("UNKNOWN");
+		valueList.add("QUIET");
+		valueList.add("PRE_ALARM");
+		valueList.add("ALARM");
+		valueList.add("FAULT");
+		valueList.add("NOT_READY");
+		valueList.add("ACTIVE");
+		valueList.add("TEST_ACTIVE");
+		valueList.add("ABNORMAL");
+		valueList.add("EMERGENCY_POWER");
+		valueList.add("LOCAL_ALARM");
+		valueList.add("GENERAL_ALARM");
+		valueList.add("ISA_SYSTEM_FAULT");
+		valueList.add("ISA_FIRST_ALARM");
+		valueList.add("ISA_EXTINGUISHING_WARNING");
+		valueList.add("ISA_EXTINGUISHING_RELEASED");
+		valueList.add("ISA_NON_DEFAULT_MODE");
 	}
 	
-	public static String toString(Integer i){		
+	public static String toString(Integer i){
 		if(valueMap.containsKey(i)){
 			return valueMap.get(i);
+		}else{
+			return valueMap.get(-1);
+		}
+	}
+	public static String toString(String s){
+		s = s.toUpperCase();
+		if(valueList.contains(s)){
+			return s;
 		}else{
 			return valueMap.get(-1);
 		}

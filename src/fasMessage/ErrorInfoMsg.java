@@ -3,7 +3,6 @@ package fasMessage;
 import Enum.MsgTypeEnum;
 import fasMessage.msgContent.MsgContentError;
 import fasUtil.ConfigUtil;
-import fasUtil.JsonUtil;
 
 public class ErrorInfoMsg extends FASMessage{
 	private String msgfrom;

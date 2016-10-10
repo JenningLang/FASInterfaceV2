@@ -62,35 +62,30 @@ public class FASInterfaceMain {
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
 			FASLogger.info("Program exit!");
-			FASLogger.debug(e.getMessage(), e);
 			return;
 		}catch(FASRemoteDeviceConnException e){
 			FASLogger.error("FASRemoteDeviceConnException");
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
 			FASLogger.info("Program exit!");
-			FASLogger.debug(e.getMessage(), e);
 			return;
 		}catch(ConfigFASNodeException e){
 			FASLogger.error("ConfigZoneAndDeviceException");
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
 			FASLogger.info("Program exit!");
-			FASLogger.debug(e.getMessage(), e);
 			return;
 		}catch(FCMPInitialException e){
 			FASLogger.error("FCMPInitialException");
 			FASLogger.info("Sources release ...");
 			closeFCMP();
 			FASLogger.info("Program exit!");
-			FASLogger.debug(e.getMessage(), e);
 			return;
 		}catch(Exception e){
 			FASLogger.error("'Interface' machine building failed!");
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
 			FASLogger.info("Program exit!");
-			FASLogger.debug(e.getMessage(), e);
 			return;
 		}
 		FASLogger.info("'Interface' machine building succeed!");

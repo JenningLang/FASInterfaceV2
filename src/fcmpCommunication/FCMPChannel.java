@@ -7,13 +7,15 @@ import fasException.FCMPInitialException;
 import fasUtil.ConfigUtil;
 import FCMP.RecvMessage;
 
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class FCMPChannel implements Runnable{
 	
 	private Communication commChannel;
-	private static Queue<RecvMessage> messageQueue = new LinkedList<RecvMessage>();// 消息队列
+	// 消息队列，Creates a LinkedBlockingQueue with a capacity of Integer.MAX_VALUE = 2^31 - 1
+	private static BlockingQueue<RecvMessage> messageQueue = new LinkedBlockingQueue<RecvMessage>();
 	
 	private Logger logger = FASInterfaceMain.FASInterfaceMain.FASLogger;
 	
@@ -63,7 +65,7 @@ public class FCMPChannel implements Runnable{
 		return this.commChannel;
 	}
 	
-	public static Queue<RecvMessage> getMessageQueue(){
+	public static BlockingQueue<RecvMessage> getMessageQueue(){
 		return messageQueue;
 	}
 

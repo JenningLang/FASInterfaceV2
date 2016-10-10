@@ -5,7 +5,6 @@ import java.util.List;
 import Enum.MsgTypeEnum;
 import Enum.NodeEnum;
 import fasMessage.msgContent.MsgContentConfig;
-import fasMessage.msgContent.MsgContentStatus;
 import fasUtil.ConfigUtil;
 
 public class ConfigReplyMsg extends FASMessage{
