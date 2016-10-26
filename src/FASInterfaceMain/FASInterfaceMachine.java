@@ -25,12 +25,9 @@ public class FASInterfaceMachine implements Runnable{
 	private BlockingQueue<RecvMessage> fcmpMQ = FCMPChannel.getMessageQueue();
 	private Logger logger = FASInterfaceMain.FASLogger;
 
-	/**
-	 * 这里之所以捕捉异常并再次抛出，是为了防止创建到一半时报错，但上一层函数无法释放已经初始化的资源
-	 * */
-	public FASInterfaceMachine() 
-			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException, 
-			FCMPInitialException{
+	public FASInterfaceMachine(){}
+
+	public void fireAlarmSystemConfig() throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		// 创建 FAS 对象
 		try{
 			fireAlarmSystem = new SiemensFAS();
@@ -38,11 +35,12 @@ public class FASInterfaceMachine implements Runnable{
 			fireAlarmSystem.getFasCommChan().closeCommChannel();
 			throw e;
 		}
+	}
+	public void fcmpConfig() throws FCMPInitialException{
 		// 创建 FCMP 对象
 		try{
 			FCMPChan = new FCMPChannel();
 		}catch(FCMPInitialException e){
-			fireAlarmSystem.getFasCommChan().closeCommChannel();
 			throw e;
 		}
 		// 运行FCMP接收数据线程

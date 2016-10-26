@@ -161,12 +161,15 @@ public class SiemensFAS {
 	 * 打印所有FAS节点信息
 	 * */
 	public void printFASStatus(boolean treeFlag) throws ConfigFASNodeException {
+		printFASStatus(treeFlag, false);
+	}
+	public void printFASStatus(boolean treeFlag, boolean fullInfoFlag) throws ConfigFASNodeException {
 		if(treeFlag){
 			// TODO here needs to be revised 
 			refreshLocalFAS();
 			for(FASNode node: fasNodeList){
 				if(node.getNodeType().equals(NodeEnum.Area)){
-					treePrint(0, node.getNodeID());
+					treePrint(0, node.getNodeID(), fullInfoFlag);
 				}
 			}
 		}else{
@@ -177,7 +180,7 @@ public class SiemensFAS {
 	/**
 	 * 迭代的树状打印
 	 * */
-	private void treePrint(int spaceNum, String nodeID){
+	private void treePrint(int spaceNum, String nodeID, boolean fullInfoFlag){
 		if(fasNodeList.size() == 0)
 			return;
 		int nodeIndex = 0;
@@ -191,13 +194,27 @@ public class SiemensFAS {
 			System.out.print(" ");
 		}
 		System.out.print("|-");
-		String temp = fasNodeList.get(nodeIndex).getNodeID() + 
-				":" + fasNodeList.get(nodeIndex).getNodeStatus();
+		String temp;
+		if(fullInfoFlag){
+			temp = fasNodeList.get(nodeIndex).getNodeID();
+			String desTemp = fasNodeList.get(nodeIndex).getNodeDescription();
+			if(fasNodeList.get(nodeIndex).getNodeType().equals(NodeEnum.Device)){
+				desTemp = desTemp.substring(14); // "Customtext is": 13 characters
+				desTemp = desTemp.substring(0, desTemp.indexOf(',') - 1);
+			}
+			temp += ": " + desTemp;
+			temp += ": " + fasNodeList.get(nodeIndex).getNodeStatus();
+		}
+		else{
+			temp = fasNodeList.get(nodeIndex).getNodeID();
+			temp += ": " + fasNodeList.get(nodeIndex).getNodeStatus();
+		}
 		System.out.print(temp);
-		System.out.print("-");
 		System.out.println("");
+		
+		// 递归调用
 		for(String childNodeID: fasNodeList.get(nodeIndex).getChildNodeIDList()){
-			treePrint(spaceNum + 2 + (temp.length() >> 1), childNodeID);
+			treePrint(spaceNum + 2 + 1, childNodeID, fullInfoFlag);
 		}
 	}
 	

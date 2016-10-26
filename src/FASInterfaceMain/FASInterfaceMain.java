@@ -23,6 +23,11 @@ public class FASInterfaceMain {
 	private static Thread mainThread; // 主线程
 	private static FASInterfaceMachine machine; // FAS接口机对象
 	
+	private static boolean standAloneFlag = false; // 运行模式，true 单机，false 联网 
+
+	// 人机界面的提示符定义
+	private static final String prompt = "\\>";
+	
 	public static void main(String[] args)
 	{
 		// log4j 读属性
@@ -49,14 +54,15 @@ public class FASInterfaceMain {
 			return;
 		}
 		System.out.println("");
-		// 人机界面的提示符定义
-		String prompt = "\\>";
 		
 		///////////////////////////// 1 接口机对象创建与初始化  /////////////////////////////
 		FASLogger.info("1 **************************************************");
 		FASLogger.info("Building the 'Interface' machine...");
+		machine = new FASInterfaceMachine();
+
+		FASLogger.info("Try to build a connection with the FAS panel...");
 		try {
-			machine = new FASInterfaceMachine();
+			machine.fireAlarmSystemConfig();
 		}catch(FASLocalDeviceInitException e){
 			FASLogger.error("FASLocalDeviceInitException");
 			FASLogger.info("Sources release ...");
@@ -75,18 +81,21 @@ public class FASInterfaceMain {
 			sourcesRelease();
 			FASLogger.info("Program exit!");
 			return;
-		}catch(FCMPInitialException e){
-			FASLogger.error("FCMPInitialException");
-			FASLogger.info("Sources release ...");
-			closeFCMP();
-			FASLogger.info("Program exit!");
-			return;
 		}catch(Exception e){
-			FASLogger.error("'Interface' machine building failed!");
+			FASLogger.error("Failed to build a connection with the FAS panel!");
 			FASLogger.info("Sources release ...");
 			sourcesRelease();
 			FASLogger.info("Program exit!");
 			return;
+		}
+		
+		FASLogger.info("Try to build an FCMP appliction...");
+		try {
+			machine.fcmpConfig();
+		}catch(Exception e){
+			FASLogger.error("FCMPInitialException");
+			FASLogger.info("Program will run in stand-alone mode!");
+			standAloneFlag = true;
 		}
 		FASLogger.info("'Interface' machine building succeed!");
 		System.out.println("");
@@ -113,25 +122,28 @@ public class FASInterfaceMain {
 		FASLogger.info("Handshake building succeed!");
 		System.out.println("");
 		
-		/////////////////////////////  3 启动主进程    ///////////////////////////// 
-		FASLogger.info("3 **************************************************");
-		FASLogger.info("Starting the 'Interface' machine...");
-		mainThread = new Thread(machine, "FASMainThread");
-		try{
-			// 启动主进程
-			mainThread.start();
-		}catch(Exception e){
-			FASLogger.debug(e.getMessage(), e);
-			FASLogger.error("'Interface' machine starting failed!");
-			FASLogger.info("Sources release ...");
-			sourcesRelease();
-			FASLogger.info("Program exit!");
-			return;
+		/////////////////////////////  3 启动主进程    /////////////////////////////
+		if(standAloneFlag == false){
+			FASLogger.info("3 **************************************************");
+			FASLogger.info("Starting the 'Interface' machine...");
+			mainThread = new Thread(machine, "FASMainThread");
+			try{
+				// 启动主进程
+				mainThread.start();
+			}catch(Exception e){
+				FASLogger.debug(e.getMessage(), e);
+				FASLogger.error("'Interface' machine starting failed!");
+				FASLogger.info("Sources release ...");
+				sourcesRelease();
+				FASLogger.info("Program exit!");
+				return;
+			}
+			FASLogger.info("'Interface' machine starting succeed!");
+			System.out.println("");
 		}
-		FASLogger.info("'Interface' machine starting succeed!");
-		System.out.println("");
-		
 		// HMI 人机交互
+		boolean treeFlag = true;
+		boolean fullFlag = true;
 		try{
 			Scanner reader = new Scanner(System.in);
 			String inputCommand;
@@ -139,47 +151,87 @@ public class FASInterfaceMain {
 			System.out.print(prompt);
 			while(true){
 				inputCommand = reader.nextLine().trim().toLowerCase();
-				if(inputCommand.equals("exit") || inputCommand.equals("quit")){
-					FASLogger.info("Sources release ...");
-					sourcesRelease();
-					// 关闭Scanner
-					reader.close();
-					System.out.println("Good luck, bye-bye!");
-					return;
-				}else if(inputCommand.equals("help") || inputCommand.equals("h")){
-					printHelp();
-					System.out.print(prompt);
-				}else if(inputCommand.equals("getfcmpclients") || inputCommand.equals("gc")){
-					List<Address> l = new ArrayList<Address>();
-					machine.getFCMPChan().getCommChannel().getAliveClt(l);
-					if(l.size() == 0){
-						System.out.println("No alive FCMP client!");
-					}
-					else{
-						l.forEach((addr)->System.out.println(addr.toString()));
-					}
-					System.out.print(prompt);
-				}else if(inputCommand.equals("getfcmpservers") || inputCommand.equals("gs")){
-					List<Address> l = new ArrayList<Address>();
-					machine.getFCMPChan().getCommChannel().getAliveServer(l);
-					if(l.size() == 0){
-						System.out.println("No alive FCMP server!");
-					}
-					else{
-						l.forEach((addr)->System.out.println(addr.toString()));
-					}
-					System.out.print(prompt);
-				}else if(inputCommand.equals("fasconnstatus")){
-					System.out.println("Every 25 seconds the program "
-							+ "checks the connection with the Siemens FAS panel. ");
-					System.out.print(prompt);
-				}else if(inputCommand.equals("fasstatus") || inputCommand.equals("fs")){
-					machine.getFireAlarmSystem().printFASStatus(true);
-					System.out.print(prompt);
-				}else{
-					System.out.println("Wrong command!");
-					printHelp();
-					System.out.print(prompt);
+				switch(inputCommand)
+				{
+					// 退出
+					case "exit":
+					case "quit":
+					case "e":
+					case "q":
+						FASLogger.info("Sources release ...");
+						sourcesRelease();
+						// 关闭Scanner
+						reader.close();
+						System.out.println("Good luck, bye-bye!");
+						return;
+					// 帮助
+					case "help":
+					case "h":
+						printHelp();
+						System.out.print(prompt);
+						break;
+					// 获取FCMP所有客户端节点地址
+					case "getfcmpclients":
+					case "gc":
+						if(standAloneFlag == false){
+							List<Address> cl = new ArrayList<Address>();
+							machine.getFCMPChan().getCommChannel().getAliveClt(cl);
+							if(cl.size() == 0){
+								System.out.println("No alive FCMP client!");
+							}
+							else{
+								cl.forEach((addr)->System.out.println(addr.toString()));
+							}
+							System.out.print(prompt);
+						}else{
+							System.out.println("In stand-alone mode!");
+							System.out.print(prompt);
+						}
+						break;
+					// 获取FCMP所有服务器节点地址
+					case "getfcmpservers":
+					case "gs":
+						if(standAloneFlag == false){
+							List<Address> sl = new ArrayList<Address>();
+							machine.getFCMPChan().getCommChannel().getAliveServer(sl);
+							if(sl.size() == 0){
+								System.out.println("No alive FCMP server!");
+							}
+							else{
+								sl.forEach((addr)->System.out.println(addr.toString()));
+							}
+							System.out.print(prompt);
+						}else{
+							System.out.println("In stand-alone mode!");
+							System.out.print(prompt);
+						}
+						break;
+					// FAS 状态查询
+					case "fasstatus":
+					case "fs":
+						machine.getFireAlarmSystem().printFASStatus(treeFlag, fullFlag);
+						System.out.print(prompt);
+						break;
+					case "fasstatus -f":
+					case "fs -f":
+						fullFlag = true;
+						machine.getFireAlarmSystem().printFASStatus(treeFlag, fullFlag);
+						System.out.print(prompt);
+						break;
+					case "fasstatus -a":
+					case "fs -a":
+						fullFlag = false;
+						machine.getFireAlarmSystem().printFASStatus(treeFlag, fullFlag);
+						System.out.print(prompt);
+						break;
+					case "":
+						System.out.print(prompt);
+						break;
+					// 错误指令
+					default:
+						System.out.println("Wrong command!");
+						printHelp();
+						System.out.print(prompt);
 				}
 			}
 		} catch (Exception e) {
@@ -243,8 +295,7 @@ public class FASInterfaceMain {
 	private static void printHelp(){
 		System.out.println("*** FAS interface with Siemens FS20. ***\n"
 				+ "All commands:\n"
-				+ "\t FASStatus or fs --- Show the status of zones and devices\n"
-				+ "\t FASConnStatus --- A tip of checking the connection status with the Siemens FAS panel\n"
+				+ "\t FASStatus or fs (-f or -a) --- Show the status of zones and devices\n"
 				+ "\t GetFCMPClients or gc --- Show all the FCMP clients' address\n"
 				+ "\t GetFCMPServers or gs --- Show all the FCMP servers' address\n"
 				+ "\t Exit/Quit --- Exit\n"
