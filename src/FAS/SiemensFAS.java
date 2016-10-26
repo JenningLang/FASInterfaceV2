@@ -123,7 +123,7 @@ public class SiemensFAS {
 			}else{
 				value = bacnetValueEnum.toString(ackStr);
 			}
-			logger.debug("Node: " + instantNumber + ": " + value);
+			logger.debug("Node: " + instantNumber + ": bacnet return: " + ackStr + ": extract: " + value);
 			return value;
 		}catch(Exception e){
 			logger.debug("In " + this.getClass().getName());
