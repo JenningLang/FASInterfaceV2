@@ -32,7 +32,6 @@ public class connectionKeeper implements Runnable{
 	
 	@Override
 	public void run(){
-		// TODO Auto-generated method stub
 		while(true){
 			try {
 		    AcknowledgementService ack = ld.send(
