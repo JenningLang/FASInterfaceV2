@@ -9,6 +9,13 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jdom.JDOMException;
 
+import com.serotonin.bacnet4j.service.acknowledgement.AcknowledgementService;
+import com.serotonin.bacnet4j.service.acknowledgement.ReadPropertyAck;
+import com.serotonin.bacnet4j.service.confirmed.ReadPropertyRequest;
+import com.serotonin.bacnet4j.type.enumerated.ObjectType;
+import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
+import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
+
 import FCMP.*;
 import fasException.*;
 import fasUtil.ConfigUtil;
@@ -224,6 +231,32 @@ public class FASInterfaceMain {
 						machine.getFireAlarmSystem().printFASStatus(treeFlag, fullFlag);
 						System.out.print(prompt);
 						break;
+					case "bacnet property query":
+					case "bacnet":
+					case "b":
+						System.out.print(prompt + "Object Type Number: ");
+						inputCommand = reader.nextLine().trim().toLowerCase();
+						int objTypeTemp = Integer.parseInt(inputCommand);
+						System.out.print(prompt + "Instant Number: ");
+						inputCommand = reader.nextLine().trim().toLowerCase();
+						int instantNumTemp = Integer.parseInt(inputCommand);
+						com.serotonin.bacnet4j.LocalDevice ld = 
+								machine.getFireAlarmSystem().getFasCommChan().getInterfaceFASDevice();
+						com.serotonin.bacnet4j.RemoteDevice rd = 
+								machine.getFireAlarmSystem().getFasCommChan().getSiemensFASDevice();
+						try {
+							ReadPropertyAck ack = (ReadPropertyAck)ld.send(
+						    		rd, 
+						    		new ReadPropertyRequest(
+						    				new ObjectIdentifier(new ObjectType(objTypeTemp), instantNumTemp), 
+						    				PropertyIdentifier.trackingValue)
+						    		);
+						    System.out.println(prompt + ack.getValue().toString().trim().toUpperCase());
+						} catch (Exception e) {
+							System.out.println(e.getMessage() + e);
+						}
+						System.out.print(prompt);
+						break;
 					case "":
 						System.out.print(prompt);
 						break;
@@ -295,11 +328,12 @@ public class FASInterfaceMain {
 	private static void printHelp(){
 		System.out.println("*** FAS interface with Siemens FS20. ***\n"
 				+ "All commands:\n"
-				+ "\t FASStatus or fs (-f or -a) --- Show the status of zones and devices\n"
-				+ "\t GetFCMPClients or gc --- Show all the FCMP clients' address\n"
-				+ "\t GetFCMPServers or gs --- Show all the FCMP servers' address\n"
-				+ "\t Exit/Quit --- Exit\n"
-				+ "\t Help or h --- Open this help file.\n"
+				+ "\t FASStatus or fs (-f or -a) \n\t\t --- Show the status of zones and devices\n"
+				+ "\t bacnet property query or bacnet or b \n\t\t --- directly query bacnet property from the FAS panel\n"
+				+ "\t GetFCMPClients or gc \n\t\t --- Show all the FCMP clients' address\n"
+				+ "\t GetFCMPServers or gs \n\t\t --- Show all the FCMP servers' address\n"
+				+ "\t Exit/Quit \n\t\t --- Exit\n"
+				+ "\t Help or h \n\t\t --- Open this help file.\n"
 				+ "*** Help end. ***\n");
 	}
 }
