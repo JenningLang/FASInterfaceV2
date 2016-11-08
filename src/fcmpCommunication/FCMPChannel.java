@@ -7,7 +7,6 @@ import fasException.FCMPInitialException;
 import fasUtil.ConfigUtil;
 import FCMP.RecvMessage;
 
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

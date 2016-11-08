@@ -1,13 +1,6 @@
 ﻿package FCMP;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import org.omg.CORBA.portable.ValueOutputStream;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
-
-
-
 
 import FCMP.Address;
 import FCMP.Communication;

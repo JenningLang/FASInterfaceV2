@@ -2,7 +2,6 @@ package fasUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;

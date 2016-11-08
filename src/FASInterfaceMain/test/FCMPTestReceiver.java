@@ -1,9 +1,5 @@
 package FASInterfaceMain.test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import com.zhenninglang.variableTimer.TimerTask;
 import com.zhenninglang.variableTimer.VariableTimer;
 

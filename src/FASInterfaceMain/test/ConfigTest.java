@@ -3,7 +3,6 @@ package FASInterfaceMain.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import Enum.bacnetValueEnum;
 import FAS.FASNode;
 import FAS.SibX.SiemensConfig;
 
