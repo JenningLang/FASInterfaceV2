@@ -24,6 +24,7 @@ public class SiemensFAS {
 	private String siemensFASIP; // FAS 主机 ip
 	private int siemensFASID; // FAS 主机的 BACnet ID
 	private String interfaceFASIP; // 接口机 ip
+	private int interfaceFASPort; // 接口机端口号
 	private int interfaceFASID; // 接口机的BACnet ID
 	
 	private List<FASNode> fasNodeList; // 区间列表
@@ -38,26 +39,28 @@ public class SiemensFAS {
 			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		siemensFASIP = ConfigUtil.getSiemensFASIP();
 		interfaceFASIP = ConfigUtil.getInterfaceFASIP();
+		interfaceFASPort = ConfigUtil.getInterfaceFASPort();
 		siemensFASID = ConfigUtil.getSiemensFASID();
 		interfaceFASID = ConfigUtil.getInterfaceFASID();
-		SiemensFASInit(interfaceFASIP, interfaceFASID, siemensFASIP, siemensFASID);
+		SiemensFASInit(interfaceFASIP, interfaceFASPort, interfaceFASID, siemensFASIP, siemensFASID);
 	}
-	public SiemensFAS(String interfaceFASIP, int interfaceFASID, String siemensFASIP, int siemensFASID) 
+	public SiemensFAS(String interfaceFASIP, int interfaceFASPort, int interfaceFASID, String siemensFASIP, int siemensFASID) 
 			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		this.interfaceFASIP = interfaceFASIP;
 		this.interfaceFASID = interfaceFASID;
+		this.interfaceFASPort = interfaceFASPort;
 		this.siemensFASIP = siemensFASIP;
 		this.siemensFASID = siemensFASID;
-		SiemensFASInit(interfaceFASIP, interfaceFASID, siemensFASIP, siemensFASID);
+		SiemensFASInit(interfaceFASIP, interfaceFASPort, interfaceFASID, siemensFASIP, siemensFASID);
 	}
 	
 	// 设备连接，SibX文件读取，状态变量初始化
-	public void SiemensFASInit(String interfaceFASIP, int interfaceFASID, String siemensFASIP, int siemensFASID) 
+	public void SiemensFASInit(String interfaceFASIP, int interfaceFASPort, int interfaceFASID, String siemensFASIP, int siemensFASID) 
 			throws FASLocalDeviceInitException, FASRemoteDeviceConnException, ConfigFASNodeException{
 		/* ************************************************ 
 		 *        与 FAS 主机通信信道创建于初始化                              *
 		 ************************************************ */
-		fasCommChan = new FASCommChannel(siemensFASIP, siemensFASID, interfaceFASIP, interfaceFASID); 
+		fasCommChan = new FASCommChannel(siemensFASIP, siemensFASID, interfaceFASIP, interfaceFASPort, interfaceFASID); 
 
 		/* ************************************************ 
 		 * 通过 FASCommChannel 和西门子xml文档来获取设备信息  *

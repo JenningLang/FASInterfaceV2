@@ -22,6 +22,7 @@ public class ConfigUtil {
 	private static String siemensFASIP; // FAS 主机 ip
 	private static int siemensFASID; // FAS 主机的 BACnet ID
 	private static String interfaceFASIP; // 接口机 ip
+	private static int interfaceFASPort; // 接口机 端口
 	private static int interfaceFASID; // 接口机的BACnet ID
 
 	private static String FCMPAppAddr; // 用于FCMP通信的ip地址
@@ -57,6 +58,7 @@ public class ConfigUtil {
 		Element FASConfEle = document.getRootElement().getChild("FASConfig");
 		Element siemensFASIPEle = FASConfEle.getChild("siemensFASIP");
 		Element interfaceFASIPEle = FASConfEle.getChild("interfaceFASIP");
+		Element siemensFASPortEle = FASConfEle.getChild("interfaceFASPort");
 		Element siemensFASIDEle = FASConfEle.getChild("siemensFASID");
 		Element interfaceFASIDEle = FASConfEle.getChild("interfaceFASID");
 		// FCMP Elements
@@ -70,6 +72,7 @@ public class ConfigUtil {
 		
 		siemensFASIP = siemensFASIPEle.getText().trim();
 		interfaceFASIP = interfaceFASIPEle.getText().trim();
+		interfaceFASPort = Math.abs(Integer.parseInt(siemensFASPortEle.getText().trim()));
 		siemensFASID = Math.abs(Integer.parseInt(siemensFASIDEle.getText().trim()));
 		interfaceFASID = Math.abs(Integer.parseInt(interfaceFASIDEle.getText().trim()));
 		
@@ -119,6 +122,9 @@ public class ConfigUtil {
 	}
 	public static String getInterfaceFASIP() {
 		return interfaceFASIP;
+	}
+	public static int getInterfaceFASPort() {
+		return interfaceFASPort;
 	}
 	public static int getInterfaceFASID() {
 		return interfaceFASID;

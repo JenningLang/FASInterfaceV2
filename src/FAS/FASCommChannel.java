@@ -23,6 +23,7 @@ public class FASCommChannel {
 	private String siemensFASIP; // FAS 主机 ip
 	private int siemensFASID; // FAS 主机的 BACnet ID
 	private String interfaceFASIP; // 接口机 ip
+	private int interfaceFASPort; // 接口机的端口号
 	private int interfaceFASID; // 接口机的BACnet ID
 	
 	private IpNetwork FASNetwork; // 接口机的网络
@@ -32,12 +33,13 @@ public class FASCommChannel {
 	
 	private Logger logger = FASInterfaceMain.FASInterfaceMain.FASLogger;
 	
-	public FASCommChannel(String siemensFASIP, int siemensFASID, String interfaceFASIP, int interfaceFASID)
+	public FASCommChannel(String siemensFASIP, int siemensFASID, String interfaceFASIP, int interfaceFASPort, int interfaceFASID)
 			 throws FASLocalDeviceInitException, FASRemoteDeviceConnException{
 		super();
 		this.siemensFASIP = siemensFASIP;
 		this.siemensFASID = siemensFASID;
 		this.interfaceFASIP = interfaceFASIP;
+		this.interfaceFASPort = interfaceFASPort;
 		this.interfaceFASID = interfaceFASID;
 		FASCommChannelInit();
 	}
@@ -51,7 +53,7 @@ public class FASCommChannel {
 		/* ****************** 
 		 *   创建本地设备          *
 		 ****************** */
-	    this.FASNetwork = new IpNetwork(interfaceFASIP);
+	    this.FASNetwork = new IpNetwork(interfaceFASIP, interfaceFASPort, interfaceFASIP);
 	    this.FASTransport = new Transport(FASNetwork);
 	    this.interfaceFASDevice = new LocalDevice(interfaceFASID , FASTransport); //(int deviceId, Transport transport)
 	    
