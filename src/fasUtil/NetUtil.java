@@ -16,6 +16,9 @@ public class NetUtil {
      * @throws NoAvailablePortException
      */  
 	public static int getAvailablePort(String host, int port) throws NoAvailablePortException{
+		if(host.equals("0.0.0.0")){
+			return port;
+		}
 		int counter = 0;
 		do{
 			if(isPortUsing(host, port + counter)){
