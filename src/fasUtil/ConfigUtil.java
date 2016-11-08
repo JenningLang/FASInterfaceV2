@@ -97,6 +97,9 @@ public class ConfigUtil {
 		if(FCMPRemotePort > 65535 || FCMPRemotePort < 0){
 			throw new InvalidConfigException(String.valueOf(FCMPRemotePort), "port number: remotePort");
 		}
+		if(interfaceFASPort > 65535 || interfaceFASPort < 0){
+			throw new InvalidConfigException(String.valueOf(interfaceFASPort), "port number: BACnet");
+		}
 		
 		// ÅäÖÃÏî¶ÁÈ¡Íê±Ï
 		logger.info("Config result:");
