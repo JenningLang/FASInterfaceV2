@@ -107,6 +107,7 @@ public class ConfigUtil {
 		logger.info("\t\t FAS: siemensFASIP: " + siemensFASIP);
 		logger.info("\t\t FAS: siemensFASID: " + siemensFASID);
 		logger.info("\t\t FAS: interfaceFASIP: " + interfaceFASIP);
+		logger.info("\t\t FAS: interfaceFASPort: " + interfaceFASPort);
 		logger.info("\t\t FAS: interfaceFASID: " + interfaceFASID);
 		logger.info("\t\t FCMP: AppAddr: " + FCMPAppAddr);
 		logger.info("\t\t FCMP: LocalPort: " + FCMPLocalPort);
