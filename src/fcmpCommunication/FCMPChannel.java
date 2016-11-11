@@ -25,6 +25,8 @@ public class FCMPChannel implements Runnable{
 			logger.info("FCMP initial failed!");
 			throw new FCMPInitialException();
 		}
+		// TODO: 清空 FCMP 数据，主要是为了防止接口机比服务器后启动，FCMP中缓存了大量历史数据
+		//暂时不写，因为 FCMP 没有提供这个机制
 	}
 
 	/**
