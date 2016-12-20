@@ -75,7 +75,8 @@ public class FASInterfaceMachine implements Runnable{
 				}catch(Exception e){
 					// 发回错误信息
 					sendMessage(JsonUtil.toJSON(new ErrorInfoMsg("Error Info: Bad request!: " + rmsgStr)), 
-							rmsgAddr);
+							rmsgAddr, 
+							"error");
 					logger.info("Error Info: Bad request!: " + rmsgStr);
 					logger.error(e.getMessage(), e);
 					continue;
@@ -86,11 +87,11 @@ public class FASInterfaceMachine implements Runnable{
 						ConfigReplyMsg smsgClass = 
 								new ConfigReplyMsg(node.getNodeType(), node.getNodeID(), node.getNodeDescription(), 
 										node.getFatherNodeID(), node.getChildNodeIDList());
-						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr, "config");
 					}
 					// 发送 Finish
 					ConfigReplyMsg smsgClass = new ConfigReplyMsg(NodeEnum.Finish, null, null, null, new ArrayList<String>());
-					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr, "config");
 				}else if(rmsgClass.getClass().equals(StatusReqMsg.class)){ // 区域报警 和 设备故障 信息请求处理
 					// 刷新信息
 					try{
@@ -98,7 +99,8 @@ public class FASInterfaceMachine implements Runnable{
 					}catch(ConfigFASNodeException e){
 						// 发回错误信息
 						sendMessage(JsonUtil.toJSON(new ErrorInfoMsg("ConfigFASNodeException")), 
-								rmsgAddr);
+								rmsgAddr,
+								"error");
 						logger.info("ConfigFASNodeException");
 						logger.error(e.getMessage(), e);
 						continue;
@@ -108,11 +110,11 @@ public class FASInterfaceMachine implements Runnable{
 						StatusReplyMsg smsgClass = new StatusReplyMsg(node.getNodeType(), 
 								node.getNodeID(), 
 								node.getNodeStatus());
-						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+						sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr, "status");
 					}
 					// 发送 Finish
 					StatusReplyMsg smsgClass = new StatusReplyMsg(NodeEnum.Finish, null, null);
-					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr);
+					sendMessage(JsonUtil.toJSON(smsgClass), rmsgAddr, "status");
 				}
 			}
 		}
@@ -121,7 +123,7 @@ public class FASInterfaceMachine implements Runnable{
 	/**
 	 * 封装了发送消息过程
 	 * */
-	private void sendMessage(String msgStr, FCMP.Address addr){
+	private void sendMessage(String msgStr, FCMP.Address addr, String msgType){
 		SendMessage smsg = new SendMessage();
 		// address
 		List<FCMP.Address> addrList = new LinkedList<FCMP.Address>();
@@ -130,7 +132,7 @@ public class FASInterfaceMachine implements Runnable{
 		// content
 		JsonMessageBean jmb = new JsonMessageBean();
 		jmb.setFrom("FAS");
-		jmb.setType("");
+		jmb.setType(msgType);
 		jmb.setTime("");
 		jmb.setContent(msgStr);
 		smsg.setMsg(JsonUtil.toJSON(jmb));
