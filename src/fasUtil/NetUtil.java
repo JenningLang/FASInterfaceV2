@@ -37,14 +37,14 @@ public class NetUtil {
      * @param port 
      * @throws UnknownHostException  
      */  
-    private static boolean isPortUsing(String host,int port) {  
-        boolean flag = false;  
+	private static boolean isPortUsing(String host,int port) {  
+        boolean flag = false;
         try {  
-            InetAddress theAddress = InetAddress.getByName(host);  
+            InetAddress theAddress = InetAddress.getByName(host);
             Socket socket = new Socket(theAddress,port);  
-            flag = true;  
-        } catch (IOException e){
-        }  
+            flag = true;
+        	socket.close();  
+        } catch (IOException e){}
         return flag;  
     }
     
@@ -60,7 +60,6 @@ public class NetUtil {
             return false;  
         }
         for (int i = 0; i < ipValue.length; i++){  
-            String temp = ipValue[i];  
             try{
                 Integer q = Integer.valueOf(ipValue[i]);  
                 if (q > 255 || q < 0){  

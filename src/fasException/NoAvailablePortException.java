@@ -2,6 +2,7 @@ package fasException;
 
 public class NoAvailablePortException extends Exception{
 	
+	private static final long serialVersionUID = -2188697164625793663L;
 	public NoAvailablePortException(){
 		super();
 	}

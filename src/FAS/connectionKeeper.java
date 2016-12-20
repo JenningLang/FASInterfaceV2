@@ -34,14 +34,14 @@ public class connectionKeeper implements Runnable{
 	public void run(){
 		while(true){
 			try {
-		    AcknowledgementService ack = ld.send(
+		    @SuppressWarnings("unused")
+			AcknowledgementService ack = ld.send(
 		    		rd, 
 		    		new ReadPropertyRequest(
 		    				new ObjectIdentifier(ObjectType.device, rdInstanceNumber), 
 		    				PropertyIdentifier.description)
 		    		);
 				Thread.sleep((long)handInterval);
-//				logger.debug("Hand shake with FAS panel succeed!");
 			} catch (Exception e) {
 				logger.debug(e.getMessage(), e);
 				logger.error("Bad connection with FAS panel!");

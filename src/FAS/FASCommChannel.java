@@ -121,6 +121,7 @@ public class FASCommChannel {
 	    // 异常后什么都不需要处理，只需要重启本地设备即可
 		try{
 			logger.debug("Tring the first property reading from the Siemens FAS panel!");
+			@SuppressWarnings("unused")
 			AcknowledgementService ack = interfaceFASDevice.send(
 					siemensFASDevice, 
 			    	new ReadPropertyRequest(

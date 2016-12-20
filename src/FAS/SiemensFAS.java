@@ -17,7 +17,7 @@ import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 
 import Enum.NodeEnum;
-import Enum.bacnetValueEnum;
+import Enum.BacnetValueEnum;
 import FAS.SibX.SiemensConfig;
 
 public class SiemensFAS {
@@ -105,7 +105,7 @@ public class SiemensFAS {
 				return getNodeStatusByInstantNumber(node.getObjType(), node.getInstantNumber());
 			}
 		}
-		return bacnetValueEnum.toString(-1);
+		return BacnetValueEnum.toString(-1);
 	}
 	
 	/* ************************************************************************** */
@@ -122,9 +122,9 @@ public class SiemensFAS {
 			String ackStr = ack.getValue().toString().trim().toUpperCase();
 			String value = null;
 			if(containNumber(ackStr)){
-				value = bacnetValueEnum.toString(extractNumber(ackStr));
+				value = BacnetValueEnum.toString(extractNumber(ackStr));
 			}else{
-				value = bacnetValueEnum.toString(ackStr);
+				value = BacnetValueEnum.toString(ackStr);
 			}
 			logger.debug("Node: " + instantNumber + ": bacnet return: " + ackStr + ": extract: " + value);
 			return value;
@@ -133,7 +133,7 @@ public class SiemensFAS {
 			logger.debug("Get node status error, instance number: " + instantNumber);
 			logger.debug(e.getMessage(), e);
 		}
-		return bacnetValueEnum.toString(-1);
+		return BacnetValueEnum.toString(-1);
 	}
 	
 	/** 

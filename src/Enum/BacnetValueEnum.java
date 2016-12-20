@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class bacnetValueEnum {
+public class BacnetValueEnum {
 	
-	private static bacnetValueEnum bve = new bacnetValueEnum();
+	private BacnetValueEnum(){}
 	
 	// Life_Safety_Alarm_Values
 	public static final Integer ALARM = new Integer(2);
@@ -36,7 +36,7 @@ public class bacnetValueEnum {
 	private static Map<Integer, String> valueMap;
 	private static List<String> valueList;
 	
-	private bacnetValueEnum(){
+	static{
 		valueMap = new HashMap<Integer, String>();
 		valueMap.put(-1, "UNKNOWN");
 		valueMap.put(0, "QUIET");

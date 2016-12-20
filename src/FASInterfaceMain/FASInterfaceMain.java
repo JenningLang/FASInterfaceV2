@@ -282,6 +282,8 @@ public class FASInterfaceMain {
 		// ¹Ø±ÕFCMPÍ¨Ñ¶
 		closeFCMP();
 	}
+	
+	@SuppressWarnings("deprecation")
 	private static void closeHandShakeThread(){
 		if(handShakeThread != null){
 			if(handShakeThread.isAlive()){
@@ -290,13 +292,17 @@ public class FASInterfaceMain {
 			}
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
 	private static void closeMainThread(){
 		if(mainThread != null){
 			if(mainThread.isAlive()){
 				mainThread.stop(); 
 				FASLogger.info(mainThread.getName() + " has been closed!");
 			}
-		}}
+		}
+	}
+	
 	private static void closeFAS(){
 		if(machine != null){
 			if(machine.getFireAlarmSystem() != null){
@@ -307,6 +313,8 @@ public class FASInterfaceMain {
 			}
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
 	private static void closeFCMP(){
 		if(machine != null){
 			if(machine.getFCMPChan() != null){

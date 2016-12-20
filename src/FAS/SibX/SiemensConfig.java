@@ -34,6 +34,7 @@ public class SiemensConfig {
 	 * 建立树状关系
 	 * 
 	 * */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void configFASNodes(List<FASNode> nodeList) 
 			throws Exception{
 		// 读取 SibX 文件的位置和文件名
@@ -149,7 +150,7 @@ public class SiemensConfig {
 										childNodeIDList, 
 										objType, 
 										instantNumber, 
-										bacnetValueEnum.toString(-1)));
+										BacnetValueEnum.toString(-1)));
 					// 哈希表中添加元素
 					sibxID2ArrayIndex.put(eleID, nodeList.size() - 1); // 新添加的元素位置是最后一位
 				}
@@ -218,7 +219,7 @@ public class SiemensConfig {
 										childNodeIDList, 
 										objType, 
 										instantNumber, 
-										bacnetValueEnum.toString(-1)));
+										BacnetValueEnum.toString(-1)));
 					// 哈希表中添加元素
 					sibxID2ArrayIndex.put(eleID, nodeList.size() - 1); // 新添加的元素位置是最后一位
 				}
@@ -292,7 +293,7 @@ public class SiemensConfig {
 										childNodeIDList, 
 										objType, 
 										instantNumber, 
-										bacnetValueEnum.toString(-1)));
+										BacnetValueEnum.toString(-1)));
 					// 哈希表中添加元素
 					sibxID2ArrayIndex.put(eleID, nodeList.size() - 1); // 新添加的元素位置是最后一位
 				}
@@ -365,7 +366,7 @@ public class SiemensConfig {
 										childNodeIDList, 
 										objType, 
 										instantNumber, 
-										bacnetValueEnum.toString(-1)));
+										BacnetValueEnum.toString(-1)));
 					// 哈希表中添加元素
 					sibxID2ArrayIndex.put(eleID, nodeList.size() - 1); // 新添加的元素位置是最后一位
 				}
@@ -392,7 +393,8 @@ public class SiemensConfig {
 	/**
 	 * 
 	 * */
-    private static String getDeviceModel(List l, Element engineeringObjectEle) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private static String getDeviceModel(List l, Element engineeringObjectEle) {
 		Element paraEle = searchElementListByAtt(
 				engineeringObjectEle.getChild("ParameterFeature", engineeringObjectEle.getNamespace()).
 				getChildren("EOParameter", engineeringObjectEle.getNamespace()), 
@@ -419,7 +421,8 @@ public class SiemensConfig {
      * @param childID
      * @return
      */
-    private static Element findFather(List l, String childID){
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private static Element findFather(List l, String childID){
     	for(Iterator<Element> it = l.iterator(); it.hasNext();){
 			Element engineeringObjectEle = (Element)it.next();
 			String eleID = engineeringObjectEle.getAttributeValue("ID");
@@ -483,6 +486,7 @@ public class SiemensConfig {
     }
     
 	// 从特定元素中抽取用户描述信息
+	@SuppressWarnings("unused")
 	private static String extractDescription(Element e){
 		return (e.getChild("StandardFeature", e.getNamespace()).
 				getChild("Description", e.getNamespace()).
@@ -490,6 +494,7 @@ public class SiemensConfig {
 	}    
 	
 	// 从特定元素中抽取实例号
+	@SuppressWarnings("unused")
 	private static int extractInstantNumber(Element e){
 		return Integer.parseInt(e.getChild("EOBACnetFeature", e.getNamespace()).
 				getChild("ObjectIdentifier", e.getNamespace()).
