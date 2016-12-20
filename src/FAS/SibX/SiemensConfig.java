@@ -13,7 +13,8 @@ import org.jdom.input.SAXBuilder;
 
 import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 
-import Enum.*;
+import Enum.BacnetValueEnum;
+import Enum.NodeEnum;
 import FAS.FASNode;
 
 /**

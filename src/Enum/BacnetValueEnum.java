@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class BacnetValueEnum {
 	
+	private static BacnetValueEnum bacnetValueEnum = new BacnetValueEnum();
 	private BacnetValueEnum(){}
 	
 	// Life_Safety_Alarm_Values
