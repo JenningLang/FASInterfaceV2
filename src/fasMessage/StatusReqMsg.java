@@ -2,7 +2,7 @@ package fasMessage;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import Enum.MsgTypeEnum;
+import fasEnum.MsgTypeEnum;
 import fasMessage.msgContent.MsgContentNull;
 
 public class StatusReqMsg extends FASMessage{

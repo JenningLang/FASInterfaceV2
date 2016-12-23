@@ -1,6 +1,6 @@
 package fasMessage;
 
-import Enum.MsgTypeEnum;
+import fasEnum.MsgTypeEnum;
 import fasMessage.msgContent.MsgContentError;
 import fasUtil.ConfigUtil;
 

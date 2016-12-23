@@ -2,7 +2,7 @@ package fasMessage.msgContent;
 
 import java.util.List;
 
-import Enum.NodeEnum;
+import fasEnum.NodeEnum;
 
 public class MsgContentConfig {
 	private NodeEnum nodeType;

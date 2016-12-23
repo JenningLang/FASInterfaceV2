@@ -1,7 +1,7 @@
 package fasMessage;
 
-import Enum.MsgTypeEnum;
-import Enum.NodeEnum;
+import fasEnum.MsgTypeEnum;
+import fasEnum.NodeEnum;
 import fasMessage.msgContent.MsgContentStatus;
 import fasUtil.ConfigUtil;
 

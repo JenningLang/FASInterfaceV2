@@ -7,14 +7,16 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 
-import FAS.*;
-import FCMP.RecvMessage;
-import FCMP.SendMessage;
+import fasEnum.*;
+
+import com.InterConnect.RecvMessage;
+import com.InterConnect.SendMessage;
+
+import fas.*;
 import fasException.*;
 import fasMessage.*;
 import fasUtil.*;
-import fcmpCommunication.FCMPChannel;
-import Enum.*;
+import fcmp.FCMPChannel;
 
 public class FASInterfaceMachine implements Runnable{
 	private SiemensFAS fireAlarmSystem;
@@ -58,7 +60,7 @@ public class FASInterfaceMachine implements Runnable{
 			// 收消息
 			if(!fcmpMQ.isEmpty()){ // 如果不做这个判断，那么当队列为空时该进程会阻塞
 				rmsg = fcmpMQ.poll(); // 消息体
-				FCMP.Address rmsgAddr = rmsg.getAddress();  // 消息地址
+				com.InterConnect.Address rmsgAddr = rmsg.getAddress();  // 消息地址
 				String rmsgStr = rmsg.getMsg(); // 消息内容，String
 				logger.debug("Message received from: " + rmsgAddr.toString());
 				logger.debug("Message content: " + rmsgStr);
@@ -123,10 +125,13 @@ public class FASInterfaceMachine implements Runnable{
 	/**
 	 * 封装了发送消息过程
 	 * */
-	private void sendMessage(String msgStr, FCMP.Address addr, String msgType){
+	private void sendMessage(String msgStr, com.InterConnect.Address addr, String msgType){
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {}
 		SendMessage smsg = new SendMessage();
 		// address
-		List<FCMP.Address> addrList = new LinkedList<FCMP.Address>();
+		List<com.InterConnect.Address> addrList = new LinkedList<com.InterConnect.Address>();
 		addrList.add(addr);
 		smsg.setAddresses(addrList);
 		// content

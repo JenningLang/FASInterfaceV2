@@ -1,6 +1,6 @@
 package fasMessage.msgContent;
 
-import Enum.NodeEnum;
+import fasEnum.NodeEnum;
 
 public class MsgContentStatus {
 	private NodeEnum nodeType;

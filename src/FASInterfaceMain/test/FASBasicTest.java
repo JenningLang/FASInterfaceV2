@@ -32,14 +32,9 @@ import com.serotonin.bacnet4j.type.primitive.Real;
 import com.serotonin.bacnet4j.type.primitive.UnsignedInteger;
 import com.serotonin.bacnet4j.util.RequestUtils;
 
-import FAS.SiemensFAS;
-import FAS.SibX.SiemensConfig;
-import FCMP.*;
-// FCMP.Address will collide with another package, so just use FCMP.Address instead
-// import FCMP.Address; 
-import FCMP.Communication;
-import FCMP.SendMessage;
-import FCMP.RecvMessage;
+import fas.SiemensFAS;
+import sibx.SiemensConfig;
+
 @SuppressWarnings("unused")
 public class FASBasicTest {
 

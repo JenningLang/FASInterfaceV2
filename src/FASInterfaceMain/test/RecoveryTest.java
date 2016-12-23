@@ -3,7 +3,7 @@ package FASInterfaceMain.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import Enum.NodeEnum;
+import fasEnum.NodeEnum;
 import fasMessage.*;
 import fasUtil.JsonUtil;
 

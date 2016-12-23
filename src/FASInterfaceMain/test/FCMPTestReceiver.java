@@ -1,9 +1,9 @@
 package FASInterfaceMain.test;
 
+import com.InterConnect.Communication;
+import com.InterConnect.RecvMessage;
 import com.zhenninglang.variableTimer.TimerTask;
 import com.zhenninglang.variableTimer.VariableTimer;
-
-import FCMP.*;
 
 public class FCMPTestReceiver {
 	public static void main(String args[]) throws Exception{

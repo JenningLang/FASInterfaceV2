@@ -2,8 +2,8 @@ package fasMessage;
 
 import java.util.List;
 
-import Enum.MsgTypeEnum;
-import Enum.NodeEnum;
+import fasEnum.MsgTypeEnum;
+import fasEnum.NodeEnum;
 import fasMessage.msgContent.MsgContentConfig;
 import fasUtil.ConfigUtil;
 

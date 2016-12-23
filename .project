@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>bacnet4J-src</name>
-			<type>2</type>
-			<location>E:/0 工作/通号院/BACnet/java/bacnet4J-src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

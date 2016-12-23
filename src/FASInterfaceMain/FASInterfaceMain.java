@@ -15,10 +15,11 @@ import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 
-import FCMP.*;
+import fas.connectionKeeper;
+
+import com.InterConnect.*;
 import fasException.*;
 import fasUtil.ConfigUtil;
-import FAS.connectionKeeper;
 
 public class FASInterfaceMain {
 

@@ -3,8 +3,8 @@ package FASInterfaceMain.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import FAS.FASNode;
-import FAS.SibX.SiemensConfig;
+import fas.FASNode;
+import sibx.SiemensConfig;
 
 public class ConfigTest {
 
